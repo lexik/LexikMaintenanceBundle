@@ -1,0 +1,6 @@
+lexik_maintenance.success_unlock: Le serveur n'est plus en maintenance.
+lexik_maintenance.not_success_unlock: Impossible d'effectuer cette action.
+lexik_maintenance.not_success_lock: Le serveur est déjà en maintenance.
+lexik_maintenance.success_lock_database: Le serveur est en maintenance via le driver base de données.
+lexik_maintenance.success_lock_file: Le serveur est en maintenance via le driver de fichier.
+lexik_maintenance.success_lock_memc: Le serveur est en maintenance via le driver memcache.

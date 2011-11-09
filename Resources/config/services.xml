@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="lexik_maintenance.listener.class">Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener</parameter>
+        <parameter key="lexik_maintenance.driver_factory.class">Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory</parameter>       
+    </parameters>
+    
+    <services>        
+       <service id="lexik_maintenance.driver.factory" class="%lexik_maintenance.driver_factory.class%">
+           <argument type="service" id="lexik_maintenance.driver.database" />
+           <argument type="service" id="translator.default" />
+           <argument>%lexik_maintenance.driver%</argument>
+       </service> 
+
+	   <service id="lexik_maintenance.listener" class="%lexik_maintenance.listener.class%">
+	       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="600"/>
+	       <argument type="service" id="lexik_maintenance.driver.factory" />
+          <argument>%lexik_maintenance.authorized_ips%</argument>
+	   </service>	
+    </services>
+</container>
