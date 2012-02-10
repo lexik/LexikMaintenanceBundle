@@ -7,7 +7,8 @@ If you are using the `deps` file to manage your project's dependencies,
 just add the following lines to it:
 
     [LexikMaintenanceBundle]
-        git=http://github.com/lexik/MaintenanceBundle.git
+        git=git://github.com/lexik/LexikMaintenanceBundle.git
+        target=bundles/Lexik/Bundle/MaintenanceBundle
 
 ## Add the namespace in the autoloader
 
@@ -54,7 +55,7 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
     lexik_maintenance:
         authorized_ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized addresses, can be not set
         driver:      
-            ttl: 3600                                                                  # Optional ttl option, ca be not set
+            ttl: 3600                                                                  # Optional ttl option, can be not set
                                                                               
              # File driver    
             class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver 
