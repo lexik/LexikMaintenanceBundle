@@ -34,16 +34,29 @@ class DriverLockCommand extends ContainerAwareCommand
             'Overwrite time to life from your configuration, doesn\'t work with file driver. Time in seconds.',
             null
         );
+        
+        $this->setHelp(<<<EOT
+   
+    You can optinally set a time to life of the maintenance
+    
+   <info>%command.full_name% --set-ttl ...</info>
+
+    You can execute the lock without a warning message wich you need to interact with:
+    
+    <info>%command.full_name% --no-interaction</info>
+EOT
+                );
     }
 
     /**
      * (non-PHPdoc)
-     * @see Symfony\Component\Console\Command.Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->lock($input, $output);
+        
         $this->driver->setTtl($input->getOption('set-ttl'));
-
+        
         $lockMessage = $this->driver->getMessageLock($this->driver->lock());
 
         $output->writeln('<info>'.$lockMessage.'</info>');
@@ -53,25 +66,30 @@ class DriverLockCommand extends ContainerAwareCommand
      * (non-PHPdoc)
      * @see Symfony\Component\Console\Command.Command::interact()
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function lock(InputInterface $input, OutputInterface $output)
     {
         $this->driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
 
         $formatter = $this->getHelperSet()->get('formatter');
         $dialog = $this->getHelperSet()->get('dialog');
 
-        // confirme
-        $output->writeln(array(
-            '',
-            $formatter->formatBlock('You are about to launch maintenance', 'bg=red;fg=white', true),
-            '',
-        ));
+        if ($input->getOption('no-interaction', false)) {
+            $confirmation = true;
+        }
+        else {
+            // confirme
+            $output->writeln(array(
+                '',
+                $formatter->formatBlock('You are about to launch maintenance', 'bg=red;fg=white', true),
+                '',
+            ));
 
-        $confirmation = $dialog->askConfirmation(
-            $output,
-            '<question>WARNING! Are you sure you wish to continue? (y/n)</question>',
-            'y'
-        );
+            $confirmation = $dialog->askConfirmation(
+                $output,
+                '<question>WARNING! Are you sure you wish to continue? (y/n)</question>',
+                'y'
+            );
+        }
 
         if ($confirmation === true) {
             // pass option ttl in command ?
