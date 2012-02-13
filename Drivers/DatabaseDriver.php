@@ -29,7 +29,7 @@ class DatabaseDriver extends AbstractDriver
      *
      * @param Registry $doctrine The registry
      */
-    public function __construct(Registry $doctrine)
+    public function __construct(Registry $doctrine = null)
     {
         $this->doctrine = $doctrine;
     }
