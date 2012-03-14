@@ -17,7 +17,7 @@
        </service> 
 
 	   <service id="lexik_maintenance.listener" class="%lexik_maintenance.listener.class%">
-	       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="600"/>
+	       <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
 	       <argument type="service" id="lexik_maintenance.driver.factory" />
           <argument>%lexik_maintenance.authorized_ips%</argument>
 	   </service>	
