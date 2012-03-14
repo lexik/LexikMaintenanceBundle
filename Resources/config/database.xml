@@ -10,7 +10,7 @@
     
     <services>        
        <service id="lexik_maintenance.driver.database" class="%lexik_maintenance.driver.database.class%" public="false">
-           <argument type="service" id="doctrine" />
+           <argument type="service" id="doctrine" on-invalid="ignore" />
        </service> 
     </services>
 </container>
