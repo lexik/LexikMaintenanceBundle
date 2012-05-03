@@ -1,0 +1,29 @@
+{
+    "name": "lexik/maintenance-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
+    "keywords": ["Symfony2", "bundle", "maintenance"],
+    "homepage": "https://github.com/lexik/LexikMaintenanceBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gilles Gauthier",
+            "email": "g.gauthier@lexik.fr"
+        },
+        {
+            "name": "Dev Lexik",
+            "email": "dev@lexik.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.0.*"
+    },
+    "suggest": {
+        "doctrine/orm": "2.1.*"
+    },
+    "autoload":     {
+        "psr-0": { "Lexik\\Bundle\\MaintenanceBundle": "" }
+    },
+    "target-dir": "Lexik/Bundle/MaintenanceBundle"
+}
