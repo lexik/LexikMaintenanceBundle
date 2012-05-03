@@ -3,8 +3,6 @@
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 use Symfony\Bundle\DoctrineBundle\Registry;
-use Doctrine\DBAL\Statement;
-use Doctrine\ORM\EntityManager;
 
 /**
  * Class driver for handle database
@@ -115,6 +113,7 @@ class DatabaseDriver extends AbstractDriver
                 return $this->createUnlock();
             }
         }
+
         return true;
     }
 

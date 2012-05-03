@@ -13,13 +13,11 @@ use Doctrine\ORM\EntityManager;
 abstract class PdoDriver
 {
     /**
-     *
      * @var \PDO
      */
     protected $db;
 
     /**
-     *
      * @var array
      */
     protected $options;
@@ -94,6 +92,7 @@ abstract class PdoDriver
         foreach ($args as $arg => $val) {
             $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
         }
+
         $success = $stmt->execute();
 
         if (!$success) {
@@ -155,3 +154,4 @@ abstract class PdoDriver
         return $return;
     }
 }
+

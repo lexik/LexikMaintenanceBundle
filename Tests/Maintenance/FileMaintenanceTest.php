@@ -3,9 +3,10 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Test driver file
@@ -50,7 +51,6 @@ class FileDriverTest extends TestCase
     }
 
     /**
-     *
      * @expectedException InvalidArgumentException
      */
     public function testExceptionInvalidPath()
@@ -88,6 +88,22 @@ class FileDriverTest extends TestCase
         $fileM->lock();
 
         $this->assertTrue($fileM->isEndTime(3600));
+    }
+
+    public function testMessages()
+    {
+        $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
+
+        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM->lock();
+
+        // lock
+        $this->assertEquals($fileM->getMessageLock(true), 'lexik_maintenance.success_lock_file');
+        $this->assertEquals($fileM->getMessageLock(false), 'lexik_maintenance.not_success_lock');
+
+        // unlock
+        $this->assertEquals($fileM->getMessageUnlock(true), 'lexik_maintenance.success_unlock');
+        $this->assertEquals($fileM->getMessageUnlock(false), 'lexik_maintenance.not_success_unlock');
     }
 
     static public function tearDownAfterClass()

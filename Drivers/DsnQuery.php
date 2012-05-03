@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManager;
  */
 class DsnQuery extends PdoDriver
 {
-
     /**
      * (non-PHPdoc)
      * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::initDb()

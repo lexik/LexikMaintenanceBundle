@@ -4,6 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver\DatabaseDriverInterface;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 

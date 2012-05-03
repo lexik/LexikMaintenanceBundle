@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManager;
 class DefaultQuery extends PdoDriver
 {
     /**
-     *
      * @var EntityManager
      */
     protected $em;
@@ -21,7 +20,7 @@ class DefaultQuery extends PdoDriver
     const NAME_TABLE   = 'lexik_maintenance';
 
     /**
-     * @param EntityManager $em      Entity Manager
+     * @param EntityManager $em Entity Manager
      */
     public function __construct(EntityManager $em)
     {

@@ -2,23 +2,15 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
-use Symfony\Component\DependencyInjection\Container;
-
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-
 use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Test for the maintenance listener

@@ -2,11 +2,12 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
+
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * Create a lock action
@@ -34,15 +35,15 @@ class DriverLockCommand extends ContainerAwareCommand
             'Overwrite time to life from your configuration, doesn\'t work with file driver. Time in seconds.',
             null
         );
-        
+
         $this->setHelp(<<<EOT
-   
+
     You can optinally set a time to life of the maintenance
-    
+
    <info>%command.full_name% --set-ttl ...</info>
 
     You can execute the lock without a warning message wich you need to interact with:
-    
+
     <info>%command.full_name% --no-interaction</info>
 EOT
                 );
@@ -54,9 +55,9 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->lock($input, $output);
-        
+
         $this->driver->setTtl($input->getOption('set-ttl'));
-        
+
         $lockMessage = $this->driver->getMessageLock($this->driver->lock());
 
         $output->writeln('<info>'.$lockMessage.'</info>');
@@ -132,3 +133,4 @@ EOT
         }
     }
 }
+

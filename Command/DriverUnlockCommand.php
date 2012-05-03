@@ -2,9 +2,9 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * Create an unlock action
@@ -25,7 +25,7 @@ class DriverUnlockCommand extends ContainerAwareCommand
             ->setDescription('Unlock access to the site while maintenance...')
             ->setHelp(<<<EOT
     You can execute the unlock without a warning message wich you need to interact with:
-    
+
     <info>%command.full_name% --no-interaction</info>
 EOT
                 );
@@ -38,7 +38,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->unlock($input, $output);
-        
+
         $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
 
         $unlockMessage = $driver->getMessageUnlock($driver->unlock());
@@ -80,3 +80,4 @@ EOT
         }
     }
 }
+
