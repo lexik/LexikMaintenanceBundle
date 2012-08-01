@@ -21,18 +21,11 @@ $deps = array(
 );
 
 $revs = array(
-    'v2.0.9' => array(
-        'symfony'           => 'v2.0.9',
-        'doctrine-common'   => '2.1.4',
-        'doctrine-dbal'     => '2.1.5',
-        'doctrine'          => '2.1.5',
-        'doctrine-fixtures' => 'origin/master'
-    ),
-    'v2.0.12' => array(
-        'symfony'           => 'v2.0.12',
-        'doctrine-common'   => '2.1.4',
-        'doctrine-dbal'     => '2.1.6',
-        'doctrine'          => '2.1.6',
+    'v2.1' => array(
+        'symfony'           => 'v2.1.0-BETA4',
+        'doctrine-common'   => '2.2.2',
+        'doctrine-dbal'     => '2.2.2',
+        'doctrine'          => '2.2.2',
         'doctrine-fixtures' => 'origin/master',
     ),
 );
