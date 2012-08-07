@@ -13,15 +13,19 @@
         {
             "name": "Dev Lexik",
             "email": "dev@lexik.fr"
+        },
+        {
+            "name": "Djuri Baars",
+            "email" : "info@djurict.nl"
         }
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "2.*",
-        "symfony/dependency-injection": "2.*"
+        "symfony/framework-bundle": "2.1",
+        "symfony/dependency-injection": "2.1"
     },
     "suggest": {
-        "doctrine/orm": ">=2.1.*"
+        "doctrine/orm": ">2.2,<2.4-dev",
     },
     "autoload":     {
         "psr-0": { "Lexik\\Bundle\\MaintenanceBundle": "" }
