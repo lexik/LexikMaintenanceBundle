@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
-use Symfony\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 /**
  * Class driver for handle database
