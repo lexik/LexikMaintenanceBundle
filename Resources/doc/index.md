@@ -9,6 +9,7 @@ just add the following lines to it:
     [LexikMaintenanceBundle]
         git=git://github.com/lexik/LexikMaintenanceBundle.git
         target=bundles/Lexik/Bundle/MaintenanceBundle
+        version=origin/symfony2.0
 
 ## Add the namespace in the autoloader
 
