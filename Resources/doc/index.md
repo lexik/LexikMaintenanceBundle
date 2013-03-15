@@ -3,40 +3,31 @@ Installation
 
 ### Standard Edition Style
 
-If you are using the `deps` file to manage your project's dependencies,
-just add the following lines to it:
+To install this bundle, add the following line to composer.json
 
-    [LexikMaintenanceBundle]
-        git=git://github.com/lexik/LexikMaintenanceBundle.git
-        target=bundles/Lexik/Bundle/MaintenanceBundle
+    {
+        "require": {
+            "doctrine/doctrine-fixtures-bundle": "dev-master"
+        }
+    }
 
-## Add the namespace in the autoloader
+Then update the vendor libraries:
 
-You must register in your autoloader:
-
-
-    <?php
-    
-    // app/autoload.php    
-    $loader->registerNamespaces(array(
-        'Lexik'            => __DIR__.'/../vendor/bundles',
-        // ...
-    ));
-
+    php composer.phar update
 
 ## Register the bundle
 
 You must register the bundle in your kernel:
 
     <?php
-    
-    // app/AppKernel.php    
+
+    // app/AppKernel.php
     public function registerBundles()
     {
-        $bundles = array(    
-            // ...    
+        $bundles = array(
+            // ...
             new Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle(),
-        );    
+        );
         // ...
     }
 
@@ -54,28 +45,28 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
     #app/config.yml
     lexik_maintenance:
         authorized_ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized addresses, can be not set
-        driver:      
+        driver:
             ttl: 3600                                                                  # Optional ttl option, can be not set
-                                                                              
-             # File driver    
-            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver 
+
+             # File driver
+            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver
             options: {file_path: %kernel.root_dir%/cache/lock}                         # file_path is the complete path for create the file
-             
+
              # MemCache driver
-            class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver 
+            class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver
             options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
-      
-            # Database driver:               
+
+            # Database driver:
             class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
-            
-            # Option 1 : for doctrine   
+
+            # Option 1 : for doctrine
             options: {connection: custom}                                            # Optional. You can choice an other connection. Wihtout option it's the doctrine default connection who will be used
-            
+
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
-            options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password 
-     
-     
-     
+            options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password
+
+
+
 ### Commands
 
 There are two commands:
@@ -88,7 +79,7 @@ This command will enable the maintenance according with your configuration. You 
 
 This command will disable the maintenance
 
-         
+
 ---------------------
 
 Custom error page 503
@@ -96,14 +87,14 @@ Custom error page 503
 
 In the listener, an exception is thrown when web site is under maintenance. This exception is a 'This exception is a 'HttpException' (status 503), to custom your error page
  you need to create a error503.html.twig (if you use twig) in:
-    app/Resources/TwigBundle/views/Exception   
-        
+    app/Resources/TwigBundle/views/Exception
+
 #### Important
 
 .. note::
 
-    You must remember that this only works if Symfony2 works.        
-    
+    You must remember that this only works if Symfony2 works.
+
 ----------------------
 
 Service
@@ -124,6 +115,6 @@ In your controller:
     $this->get('session')->setFlash('maintenance', $message);
 
     return new RedirectResponse($this->generateUrl('_demo'));
-        
-        
+
+
 **Warning**: Make sure you have allowed IP addresses if you run maintenance from the backend, otherwise you will find yourself blocked on page 503.
