@@ -2,14 +2,14 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests;
 
-require_once __DIR__.'/../../../../app/AppKernel.php';
+require_once __DIR__ . '/../../../../app/AppKernel.php';
 
 /**
  * A PHPUnit testcase with some Symfony2 tools.
  *
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
-{
+abstract class TestCase extends \PHPUnit_Framework_TestCase {
+
     /**
      * @var Symfony\Component\HttpKernel\AppKernel
      */
@@ -30,15 +30,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
      *
      * @see \PHPUnit_Framework_TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp() {
         // Boot the AppKernel in the test environment and with the debug.
         $this->kernel = new \AppKernel('test', true);
         $this->kernel->boot();
 
         // Store the container and the entity manager in test case properties
         $this->container = $this->kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine')->getEntityManager();
+        $this->entityManager = $this->container->get('doctrine')->getManager();
 
         $this->entityManager->getConnection()->beginTransaction();
 
@@ -48,8 +47,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * @see \PHPUnit_Framework_TestCase::tearDown()
      */
-    protected function tearDown()
-    {
+    protected function tearDown() {
         $this->entityManager->getConnection()->rollback();
 
         // Shutdown the kernel.
@@ -57,4 +55,5 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
         parent::tearDown();
     }
+
 }
