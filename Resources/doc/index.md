@@ -24,6 +24,22 @@ You must register in your autoloader:
     ));
 
 
+### Install using composer.json
+
+If you are using composer to manage your project, just add the following
+line to your composer.json file
+
+    {
+        "require": {
+           "doctrine/doctrine-fixtures-bundle": "dev-master"
+        }
+    }
+
+Then update the vendor libraries:
+
+    php composer.phar update
+
+
 ## Register the bundle
 
 You must register the bundle in your kernel:
