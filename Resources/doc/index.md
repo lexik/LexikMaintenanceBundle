@@ -31,7 +31,7 @@ line to your composer.json file
 
     {
         "require": {
-           "doctrine/doctrine-fixtures-bundle": "dev-master"
+        	"lexik/maintenance-bundle": "dev-master" 
         }
     }
 
