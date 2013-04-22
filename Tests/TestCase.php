@@ -38,7 +38,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
         // Store the container and the entity manager in test case properties
         $this->container = $this->kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine')->getEntityManager();
+        $this->entityManager = $this->container->get('doctrine')->getManager();
 
         $this->entityManager->getConnection()->beginTransaction();
 
