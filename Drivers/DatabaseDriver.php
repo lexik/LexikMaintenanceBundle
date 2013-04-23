@@ -45,9 +45,9 @@ class DatabaseDriver extends AbstractDriver
             $this->pdoDriver = new DsnQuery($this->options);
         } else {
             if (isset($this->options['connection'])) {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getEntityManager($this->options['connection']));
+                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager($this->options['connection']));
             } else {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getEntityManager());
+                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager());
             }
         }
     }
