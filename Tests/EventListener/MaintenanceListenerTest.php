@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,11 +25,10 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create request and test the listener
-     * -when IP authorized exists
-     * -when lock is active
-     * -when an exception is throw
+     * for scenarios with permissive firewall
+     * and restrictive with no arguments
      */
-    public function testDoRequest()
+    public function testBaseRequest()
     {
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
@@ -43,18 +41,161 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $this->factory = new DriverFactory($this->getDatabaseDriver(false),$this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
-        $listener = new MaintenanceListener($this->factory, array());
-        $this->assertNull($listener->onKernelRequest($event));
+        $listener = new MaintenanceListenerTestWrapper($this->factory);
+        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should aprove without args');
 
-        $listener = new MaintenanceListener($this->factory, array('127.0.0.1'));
-        $this->assertNull($listener->onKernelRequest($event));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, 'path', 'host', array('ip'), array('query'), 'route');
+        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should aprove with args');
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
-        $listener = new MaintenanceListener($this->factory, array());
-        $this->setExpectedException('Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException');
-        $listener->onKernelRequest($event);
+        $listener = new MaintenanceListenerTestWrapper($this->factory);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without args');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array(), array(), null);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without args');
+    }
+
+    /**
+     * Create request and test the listener
+     * for scenarios with permissive firewall
+     * and path filters
+     */
+    public function testPathFilter()
+    {
+        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+
+        $request = Request::create('http://test.com/foo?bar=baz');
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->container = $this->initContainer();
+
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without path');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '');
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty path');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/bar');
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching path');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/foo');
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching path');
+    }
+
+    /**
+     * Create request and test the listener
+     * for scenarios with permissive firewall
+     * and path filters
+     */
+    public function testHostFilter()
+    {
+        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+
+        $request = Request::create('http://test.com/foo?bar=baz');
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->container = $this->initContainer();
+
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without host');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, '');
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty host');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, 'www.google.com');
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching host');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, 'test.com');
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching host');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'test.com');
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path and matching host');
+    }
+
+    /**
+     * Create request and test the listener
+     * for scenarios with permissive firewall
+     * and ip filters
+     */
+    public function testIPFilter()
+    {
+        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+
+        $request = Request::create('http://test.com/foo?bar=baz');
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->container = $this->initContainer();
+
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without ips');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array());
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty ips');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array('8.8.4.4'));
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching ips');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array('127.0.0.1'));
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching ips');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', array('127.0.0.1'));
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path and host and matching ips');
+    }
+
+    /**
+     * Create request and test the listener
+     * for scenarios with permissive firewall
+     * and query filters
+     */
+    public function testQueryFilter()
+    {
+        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+
+        $request = Request::create('http://test.com/foo?bar=baz');
+        $postRequest = Request::create('http://test.com/foo?bar=baz', 'POST');
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $postEvent = new GetResponseEvent($kernel, $postRequest, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->container = $this->initContainer();
+
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null);
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without query');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array());
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty query');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('some' => 'attribute'));
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
+        
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('attribute'));
+        $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching get query');
+        
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
+        $this->assertTrue($listener->onKernelRequest($postEvent), 'Restrictive factory should allow on matching post query');
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', array('8.8.1.1'), array('bar' => 'baz'));
+        $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path, host and ip and matching query');
     }
 
     public function tearDown()

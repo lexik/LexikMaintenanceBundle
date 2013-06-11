@@ -8,6 +8,8 @@ use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
+use Symfony\Component\HttpFoundation\IpUtils;
+
 /**
  * Listener to decide if user can access to the site
  *
@@ -24,22 +26,35 @@ class MaintenanceListener
     protected $driverFactory;
 
     /**
-     * Authorized ips
+     * Authorized data
      *
      * @var array
      */
     protected $authorizedIps;
+    protected $path;
+    protected $host;
+    protected $ips;
+    protected $query;
+    protected $route;
+    protected $attributes;
 
     /**
      * Constructor Listener
      *
      * @param DriverFactory $driverFactory The driver factory
      * @param array         $authorizedIps The ips allowed
+     * @param String        $authorizedUri The regex to match the request uri
+     * @param String        $authorizedRoute The regex to match the current route
      */
-    public function __construct(DriverFactory $driverFactory, $authorizedIps = null)
+    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array())
     {
         $this->driverFactory = $driverFactory;
-        $this->authorizedIps = $authorizedIps;
+        $this->path = $path;
+        $this->host = $host;
+        $this->ips = $ips;
+        $this->query = $query;
+        $this->route = $route;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -52,11 +67,36 @@ class MaintenanceListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        
+        if(is_array($this->query)) {
+            foreach ($this->query as $key => $pattern) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
+                    return false;
+                }
+            }
+        }
 
-        // Get user's ip
-        $ip = $request->server->get('REMOTE_ADDR');
+        if(is_array($this->attributes)) {
+            foreach ($this->attributes as $key => $pattern) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
+                    return false;
+                }
+            }
+        }
 
-        if ($this->hasAuthorizedIps() && (in_array($ip, $this->authorizedIps))) {
+        if (null !== $this->path && !empty($this->path) && preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
+            return;
+        }
+
+        if (null !== $this->host && !empty($this->host) && preg_match('{'.$this->host.'}i', $request->getHost())) {
+            return;
+        }
+
+        if (count($this->ips) !== 0 && IpUtils::checkIp($request->getClientIp(), $this->ips)) {
+            return true;
+        }
+
+        if (null !== $this->route && !preg_match('{'.$this->route.'}', $request->get('_route'))) {
             return;
         }
 
@@ -68,15 +108,5 @@ class MaintenanceListener
         }
 
         return;
-    }
-
-    /**
-     * Check if there are authorized's ips
-     *
-     * @return boolean
-     */
-    private function hasAuthorizedIps()
-    {
-        return null != $this->authorizedIps;
     }
 }

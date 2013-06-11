@@ -35,7 +35,13 @@ class LexikMaintenanceExtension extends Extension
         }
 
         $container->setParameter('lexik_maintenance.driver', $config['driver']);
-        $container->setParameter('lexik_maintenance.authorized_ips', $config['authorized_ips']);
+
+        $container->setParameter('lexik_maintenance.authorized.path', $config['authorized']['path']);
+        $container->setParameter('lexik_maintenance.authorized.host', $config['authorized']['host']);
+        $container->setParameter('lexik_maintenance.authorized.ips', $config['authorized']['ips']);
+        $container->setParameter('lexik_maintenance.authorized.query', $config['authorized']['query']);
+        $container->setParameter('lexik_maintenance.authorized.route', $config['authorized']['route']);
+        $container->setParameter('lexik_maintenance.authorized.attributes', $config['authorized']['attributes']);
 
         if (isset($config['driver']['options']['dsn'])) {
             $this->registerDsnconfiguration($config['driver']['options']);

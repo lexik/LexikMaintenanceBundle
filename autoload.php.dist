@@ -1,39 +1,22 @@
 <?php
 
-require_once __DIR__.'/vendor/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+// if the bundle is within a symfony project, try to reuse the project's autoload
+$autoload = __DIR__.'/../../../../../app/autoload.php';
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+// if the bundle is the project, try to use the composer's autoload for the tests
+$composerAutoload = __DIR__.'/vendor/autoload.php';
 
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'Symfony\\Tests'                 => __DIR__.'/vendor/symfony/tests',
-    'Symfony'                        => __DIR__.'/vendor/symfony/src',
-    'Doctrine\\Common'               => __DIR__.'/vendor/doctrine-common/lib',
-    'Doctrine\\DBAL'                 => __DIR__.'/vendor/doctrine-dbal/lib',
-    'Doctrine'                       => __DIR__.'/vendor/doctrine/lib',
-    'Doctrine\\Common\\DataFixtures' => __DIR__.'/vendor/doctrine-fixtures/lib',
-));
+if (is_file($autoload)) {
+    include $autoload;
+} elseif (is_file($composerAutoload)) {
+    include $composerAutoload;
+} else {
+    die('Unable to find autoload.php file, please use composer to load dependencies:
 
-if (!function_exists('intl_get_error_code')) {
-    require_once __DIR__.'/vendor/symfony/src/Symfony/Component/Locale/Resources/stubs/functions.php';
+wget http://getcomposer.org/composer.phar
+php composer.phar install
 
-    $loader->registerPrefixFallbacks(array(__DIR__.'/vendor/symfony/src/Symfony/Component/Locale/Resources/stubs'));
+Visit http://getcomposer.org/ for more information.
+
+');
 }
-$loader->register();
-
-AnnotationRegistry::registerLoader(function($class) use ($loader) {
-    $loader->loadClass($class);
-    return class_exists($class, false);
-});
-AnnotationRegistry::registerFile(__DIR__.'/vendor/doctrine/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php');
-
-spl_autoload_register(function($class) {
-    $class = ltrim($class, '\\');
-    if (0 === strpos($class, 'Lexik\Bundle\MaintenanceBundle\\')) {
-        $file = __DIR__.'/'.str_replace('\\', '/', substr($class, strlen('Lexik\Bundle\MaintenanceBundle\\'))).'.php';
-        if (file_exists($file)) {
-            require $file;
-        }
-    }
-});
