@@ -40,11 +40,20 @@ class MaintenanceListener
 
     /**
      * Constructor Listener
+     * 
+     * Accepts a driver factory, and several arguments to be compared against the
+     * incoming request.
+     * When the maintenance mode is enabled, the request will be allowed to bypass
+     * it if at least one of the provided arguments is not empty and matches the
+     *  incoming request.
      *
      * @param DriverFactory $driverFactory The driver factory
-     * @param array         $authorizedIps The ips allowed
-     * @param String        $authorizedUri The regex to match the request uri
-     * @param String        $authorizedRoute The regex to match the current route
+     * @param String $path A regex for the path
+     * @param String $host A regex for the host
+     * @param array $ips The list of IP addresses
+     * @param array $query Query arguments
+     * @param String $route Route name
+     * @param array $attributes Attributes
      */
     public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array())
     {
@@ -71,7 +80,7 @@ class MaintenanceListener
         if(is_array($this->query)) {
             foreach ($this->query as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
-                    return false;
+                    return;
                 }
             }
         }
@@ -79,7 +88,7 @@ class MaintenanceListener
         if(is_array($this->attributes)) {
             foreach ($this->attributes as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
-                    return false;
+                    return;
                 }
             }
         }
@@ -93,7 +102,7 @@ class MaintenanceListener
         }
 
         if (count($this->ips) !== 0 && IpUtils::checkIp($request->getClientIp(), $this->ips)) {
-            return true;
+            return;
         }
 
         if (null !== $this->route && !preg_match('{'.$this->route.'}', $request->get('_route'))) {
