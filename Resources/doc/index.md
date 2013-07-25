@@ -69,7 +69,13 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
 
     #app/config.yml
     lexik_maintenance:
-        authorized_ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized addresses, can be not set
+        authorized:
+            path: /path                                                         # Optional. Authorized path, accepts regexs
+            host: your-domain.com                                               # Optional. Authorized domain, accepts regexs
+            ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized ip addresses
+            query: { foo: bar }                                                 # Optional. Authorized request query parameter (GET/POST)
+            route:                                                              # Optional. Authorized route name
+            attributes:                                                         # Optional. Authorized route attributes
         driver:      
             ttl: 3600                                                                  # Optional ttl option, can be not set
                                                                               
