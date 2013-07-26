@@ -10,6 +10,6 @@ env:
 
 before_script:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
-  - composer update --dev
+  - composer update --dev --prefer-source
 
 script: phpunit
