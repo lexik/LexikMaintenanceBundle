@@ -40,7 +40,7 @@ class MaintenanceListener
 
     /**
      * Constructor Listener
-     * 
+     *
      * Accepts a driver factory, and several arguments to be compared against the
      * incoming request.
      * When the maintenance mode is enabled, the request will be allowed to bypass
@@ -76,7 +76,7 @@ class MaintenanceListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        
+
         if(is_array($this->query)) {
             foreach ($this->query as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
@@ -101,7 +101,7 @@ class MaintenanceListener
             return;
         }
 
-        if (count($this->ips) !== 0 && IpUtils::checkIp($request->getClientIp(), $this->ips)) {
+        if (count($this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
             return;
         }
 
@@ -117,5 +117,27 @@ class MaintenanceListener
         }
 
         return;
+    }
+
+    /**
+     * Checks if the requested ip is valid.
+     *
+     * @param string       $requestedIp
+     * @param string|array $ips
+     * @return boolean
+     */
+    protected function checkIps($requestedIp, $ips)
+    {
+        $ips = (array) $ips;
+
+        $valid = false;
+        $i = 0;
+
+        while ($i<count($ips) && !$valid) {
+            $valid = IpUtils::checkIp($requestedIp, $ips[$i]);
+            $i++;
+        }
+
+        return $valid;
     }
 }
