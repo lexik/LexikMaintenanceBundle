@@ -184,13 +184,13 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('some' => 'attribute'));
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
-        
+
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('attribute'));
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching get query');
-        
+
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
         $this->assertTrue($listener->onKernelRequest($postEvent), 'Restrictive factory should allow on matching post query');
 
@@ -212,11 +212,11 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-                'kernel.debug'       => false,
-                'kernel.bundles'     => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-                'kernel.cache_dir'   => sys_get_temp_dir(),
-                'kernel.environment' => 'dev',
-                'kernel.root_dir'    => __DIR__.'/../../../../' // src dir
+            'kernel.debug'       => false,
+            'kernel.bundles'     => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir'   => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir'    => __DIR__.'/../../../../' // src dir
         )));
 
         return $container;
@@ -230,8 +230,8 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     protected function getDatabaseDriver($lock = false)
     {
         $db = $this->getMockbuilder('Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $db->expects($this->any())
             ->method('isExists')
