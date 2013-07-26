@@ -22,7 +22,7 @@
             <argument>%lexik_maintenance.authorized.path%</argument>
             <argument>%lexik_maintenance.authorized.host%</argument>
             <argument>%lexik_maintenance.authorized.ips%</argument>
-            <argument>%lexik_maintenance.authorized.attributes%</argument>
+            <argument>%lexik_maintenance.authorized.query%</argument>
             <argument>%lexik_maintenance.authorized.route%</argument>
             <argument>%lexik_maintenance.authorized.attributes%</argument>
         </service>	
