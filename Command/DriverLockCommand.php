@@ -4,6 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\ShmDriver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +33,7 @@ class DriverLockCommand extends ContainerAwareCommand
         $this->addOption(
             'set-ttl', 'ttl',
             InputOption::VALUE_NONE,
-            'Overwrite time to life from your configuration, doesn\'t work with file driver. Time in seconds.',
+            'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.',
             null
         );
 
@@ -99,7 +100,7 @@ EOT
             // Get default value
             $default = $this->driver->getOptions();
 
-            if (false === $optiontTtl && !($this->driver instanceof FileDriver)) {
+            if (false === $optiontTtl && !($this->driver instanceof FileDriver) && !($this->driver instanceof ShmDriver)) {
                 $output->writeln(array(
                             '',
                             'Do you want to redefine maintenance life time ?',
