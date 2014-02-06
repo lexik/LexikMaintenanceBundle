@@ -8,7 +8,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class MemCacheDriver extends AbstractDriver
+class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
 {
     /**
      * Value store in memcache
@@ -65,17 +65,15 @@ class MemCacheDriver extends AbstractDriver
     }
 
     /**
-    * (non-PHPdoc)
-    * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createLock()
-    */
+     * {@inheritdoc}
+     */
     protected function createLock()
     {
         return $this->memcacheInstance->set($this->keyName, self::VALUE_TO_STORE, false, (isset($this->options['ttl']) ? $this->options['ttl'] : 0));
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createUnlock()
+     * {@inheritdoc}
      */
     protected function createUnlock()
     {
@@ -83,8 +81,7 @@ class MemCacheDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::isExists()
+     * {@inheritdoc}
      */
     public function isExists()
     {
@@ -96,8 +93,7 @@ class MemCacheDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageLock()
+     * {@inheritdoc}
      */
     public function getMessageLock($resultTest)
     {
@@ -112,8 +108,7 @@ class MemCacheDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageUnlock()
+     * {@inheritdoc}
      */
     public function getMessageUnlock($resultTest)
     {
@@ -125,5 +120,29 @@ class MemCacheDriver extends AbstractDriver
         }
 
         return $message;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTtl($value)
+    {
+        $this->options['ttl'] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTtl()
+    {
+        return $this->options['ttl'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasTtl()
+    {
+        return isset($this->options['ttl']);
     }
 }

@@ -28,8 +28,7 @@ class DefaultQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.PdoDriver::initDb()
+     * {@inheritdoc}
      */
     public function initDb()
     {
@@ -43,8 +42,7 @@ class DefaultQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::createTableQuery()
+     * {@inheritdoc}
      */
     public function createTableQuery()
     {
@@ -54,8 +52,7 @@ class DefaultQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::deleteQuery()
+     * {@inheritdoc}
      */
     public function deleteQuery($db)
     {
@@ -63,8 +60,7 @@ class DefaultQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::selectQuery()
+     * {@inheritdoc}
      */
     public function selectQuery($db)
     {
@@ -72,8 +68,7 @@ class DefaultQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::insertQuery()
+     * {@inheritdoc}
      */
     public function insertQuery($ttl, $db)
     {

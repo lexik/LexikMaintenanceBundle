@@ -122,26 +122,6 @@ abstract class AbstractDriver
     }
 
     /**
-     * Set time to life for overwrite your basic configuration
-     *
-     * @param integer $value ttl value
-     */
-    public function setTtl($value)
-    {
-        $this->options['ttl'] = $value;
-    }
-
-    /**
-     * Return time to life
-     *
-     * @return integer
-     */
-    public function getTtl()
-    {
-        return $this->options['ttl'];
-    }
-
-    /**
      * Set translator
      *
      * @param Translator $trans Translator service
