@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DatabaseDriver extends AbstractDriver
+class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 {
     protected $doctrine;
     protected $options;
@@ -53,9 +53,8 @@ class DatabaseDriver extends AbstractDriver
     }
 
     /**
-    * (non-PHPdoc)
-    * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createLock()
-    */
+     * {@inheritdoc}
+     */
     protected function createLock()
     {
         $db = $this->pdoDriver->initDb();
@@ -76,8 +75,7 @@ class DatabaseDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createUnlock()
+     * {@inheritdoc}
      */
     protected function createUnlock()
     {
@@ -93,8 +91,7 @@ class DatabaseDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::isExists()
+     * {@inheritdoc}
      */
     public function isExists()
     {
@@ -118,8 +115,7 @@ class DatabaseDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageLock()
+     * {@inheritdoc}
      */
     public function getMessageLock($resultTest)
     {
@@ -146,5 +142,29 @@ class DatabaseDriver extends AbstractDriver
         }
 
         return $message;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTtl($value)
+    {
+        $this->options['ttl'] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTtl()
+    {
+        return $this->options['ttl'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasTtl()
+    {
+        return isset($this->options['ttl']);
     }
 }

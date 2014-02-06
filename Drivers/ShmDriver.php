@@ -68,9 +68,8 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-    * (non-PHPdoc)
-    * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createLock()
-    */
+     * {@inheritdoc}
+     */
     protected function createLock()
     {
         if ($this->shmId) {
@@ -81,8 +80,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createUnlock()
+     * {@inheritdoc}
      */
     protected function createUnlock()
     {
@@ -94,8 +92,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::isExists()
+     * {@inheritdoc}
      */
     public function isExists()
     {
@@ -111,8 +108,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageLock()
+     * {@inheritdoc}
      */
     public function getMessageLock($resultTest)
     {
@@ -127,8 +123,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageUnlock()
+     * {@inheritdoc}
      */
     public function getMessageUnlock($resultTest)
     {

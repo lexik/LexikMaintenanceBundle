@@ -13,8 +13,7 @@ use Doctrine\ORM\EntityManager;
 class DsnQuery extends PdoDriver
 {
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::initDb()
+     * {@inheritdoc}
      */
     public function initDb()
     {
@@ -33,8 +32,7 @@ class DsnQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::createTableQuery()
+     * {@inheritdoc}
      */
     public function createTableQuery()
     {
@@ -42,8 +40,7 @@ class DsnQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::deleteQuery()
+     * {@inheritdoc}
      */
     public function deleteQuery($db)
     {
@@ -51,8 +48,7 @@ class DsnQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::selectQuery()
+     * {@inheritdoc}
      */
     public function selectQuery($db)
     {
@@ -60,8 +56,7 @@ class DsnQuery extends PdoDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.DatabaseQueryInterface::insertQuery()
+     * {@inheritdoc}
      */
     public function insertQuery($ttl, $db)
     {

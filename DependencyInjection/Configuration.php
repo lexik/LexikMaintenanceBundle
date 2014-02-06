@@ -55,7 +55,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')
                             ->defaultNull()
                         ->end()
-                        ->scalarNode('ttl')
+                        ->integerNode('ttl')
                             ->defaultNull()
                         ->end()
                         ->variableNode('options')
