@@ -13,4 +13,4 @@ Several choices of maintenance mode are possible: a simple test of an existing f
 Documentation
 =============
 
-For installation and configuration refer to Resources/doc/index.md 
+For installation and how to use the bundle refer to [Resources/doc/index.md](https://github.com/lexik/LexikMaintenanceBundle/blob/master/Resources/doc/index.md)
