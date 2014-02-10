@@ -24,7 +24,7 @@ class DriverUnlockCommand extends ContainerAwareCommand
             ->setName('lexik:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
             ->setHelp(<<<EOT
-    You can execute the unlock without a warning message wich you need to interact with:
+    You can execute the unlock without a warning message which you need to interact with:
 
     <info>%command.full_name% --no-interaction</info>
 EOT
@@ -58,7 +58,7 @@ EOT
             $confirmation = true;
         }
         else {
-            // confirme
+            // confirm
             $output->writeln(array(
                 '',
                 $formatter->formatBlock('You are about to unlock your server.', 'bg=green;fg=white', true),

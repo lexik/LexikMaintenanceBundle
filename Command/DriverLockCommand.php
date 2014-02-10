@@ -29,11 +29,11 @@ class DriverLockCommand extends ContainerAwareCommand
             ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
             ->setHelp(<<<EOT
 
-    You can optinally set a time to life of the maintenance
+    You can optionally set a time to life of the maintenance
 
    <info>%command.full_name% 3600</info>
 
-    You can execute the lock without a warning message wich you need to interact with:
+    You can execute the lock without a warning message which you need to interact with:
 
     <info>%command.full_name% --no-interaction</info>
 
