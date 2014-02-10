@@ -55,7 +55,7 @@ class LexikMaintenanceExtension extends Extension
      *
      * @throws InvalidArgumentException
      */
-    protected function registerDsnconfiguration($options)
+    protected function registerDsnConfiguration($options)
     {
         if ( ! isset($options['table'])) {
             throw new InvalidArgumentException('You need to define table for dsn use');

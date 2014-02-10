@@ -44,7 +44,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException ErrorException
      */
-    public function testExceptionContructor()
+    public function testExceptionConstructor()
     {
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), array());
     }
@@ -62,7 +62,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionGetDriver()
     {
-        $driverOptions = array('class' => '\Unknow', 'options' => null);
+        $driverOptions = array('class' => '\Unknown', 'options' => null);
 
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $factory);

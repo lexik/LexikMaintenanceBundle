@@ -44,7 +44,7 @@ class DriverFactory
     /**
      * Return the driver
      *
-     * @return mixte
+     * @return mixed
      * @throws \ErrorException
      */
     public function getDriver()

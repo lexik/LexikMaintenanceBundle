@@ -42,10 +42,10 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
-        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should aprove without args');
+        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve without args');
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, 'path', 'host', array('ip'), array('query'), 'route');
-        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should aprove with args');
+        $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve with args');
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
