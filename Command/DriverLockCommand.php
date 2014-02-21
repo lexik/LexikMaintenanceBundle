@@ -49,6 +49,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $driver = $this->getDriver();
         $dialog = $this->getHelperSet()->get('dialog');
 
         if ($input->isInteractive()) {
@@ -58,7 +59,12 @@ EOT
             }
         }
 
-        $output->writeln('<info>'.$this->getDriver()->getMessageLock($this->getDriver()->lock()).'</info>');
+        // set ttl from command line if given and driver supports it
+        if ($driver instanceof DriverTtlInterface && null !== $input->getArgument('ttl')) {
+            $driver->setTtl($input->getArgument('ttl'));
+        }
+
+        $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
     }
 
     /**
@@ -105,9 +111,11 @@ EOT
                     false,
                     isset($default['ttl']) ? $default['ttl'] : 0
                 );
+
+                // override argument, to use when setting driver's ttl
+                $input->setArgument('ttl', $ttl);
             }
 
-            $driver->setTtl($input->getArgument('ttl'));
         } else {
             $output->writeln(array(
                 '',
