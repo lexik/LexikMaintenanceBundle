@@ -61,6 +61,8 @@ EOT
             }
         } elseif (null !== $input->getArgument('ttl')) {
             $this->ttl = $input->getArgument('ttl');
+        } else {
+            $this->ttl = $driver->getTtl();
         }
 
         // set ttl from command line if given and driver supports it
@@ -68,7 +70,7 @@ EOT
             $driver->setTtl($this->ttl);
         }
 
-         $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
+        $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
     }
 
     /**
@@ -111,7 +113,7 @@ EOT
                         } elseif (!is_numeric($value)) {
                             throw new \InvalidArgumentException('Time must be an integer');
                         }
-                            return $value;
+                        return $value;
                     },
                     false,
                     isset($default['ttl']) ? $default['ttl'] : 0
@@ -139,4 +141,3 @@ EOT
         return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
     }
 }
-
