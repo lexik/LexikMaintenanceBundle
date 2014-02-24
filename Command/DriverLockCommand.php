@@ -18,6 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class DriverLockCommand extends ContainerAwareCommand
 {
+    protected $ttl;
+
     /**
      * {@inheritdoc}
      */
@@ -50,15 +52,23 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
+        $driver = $this->getDriver();
 
         if ($input->isInteractive()) {
             if (!$dialog->askConfirmation($output, '<question>WARNING! Are you sure you wish to continue? (y/n)</question>', 'y')) {
                 $output->writeln('<error>Maintenance cancelled!</error>');
                 exit;
             }
+        } elseif (null !== $input->getArgument('ttl')) {
+            $this->ttl = $input->getArgument('ttl');
         }
 
-        $output->writeln('<info>'.$this->getDriver()->getMessageLock($this->getDriver()->lock()).'</info>');
+        // set ttl from command line if given and driver supports it
+        if ($driver instanceof DriverTtlInterface) {
+            $driver->setTtl($this->ttl);
+        }
+
+         $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
     }
 
     /**
@@ -82,6 +92,7 @@ EOT
             '',
         ));
 
+        $ttl = null;
         if ($driver instanceof DriverTtlInterface) {
             if (null === $input->getArgument('ttl')) {
                 $output->writeln(array(
@@ -107,7 +118,8 @@ EOT
                 );
             }
 
-            $driver->setTtl($input->getArgument('ttl'));
+            $ttl = (int) $ttl;
+            $this->ttl = $ttl ? $ttl : $input->getArgument('ttl');
         } else {
             $output->writeln(array(
                 '',
