@@ -61,7 +61,7 @@ EOT
             }
         } elseif (null !== $input->getArgument('ttl')) {
             $this->ttl = $input->getArgument('ttl');
-        } else {
+        } elseif ($driver instanceof DriverTtlInterface) {
             $this->ttl = $driver->getTtl();
         }
 
