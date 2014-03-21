@@ -5,6 +5,7 @@ This bundle allows you to place your website in maintenance mode by calling two 
 it is possible to authorize certain ips addresses stored in your configuration
 
 [![Build Status](https://secure.travis-ci.org/lexik/LexikMaintenanceBundle.png?branch=master)](http://travis-ci.org/lexik/LexikMaintenanceBundle)
+![Project Status](http://stillmaintained.com/lexik/LexikMaintenanceBundle.png)
 
 Several choices of maintenance mode are possible: a simple test of an existing file, or memcache, or in a database.
 
