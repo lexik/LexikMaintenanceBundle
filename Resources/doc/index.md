@@ -95,7 +95,11 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
             options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password 
-     
+
+        #Optional. response code and status of the mantainence page
+        response:
+            code: 503 
+            status: "Service Temporarily Unavailable"    
      
      
 ### Commands
@@ -127,6 +131,16 @@ In the listener, an exception is thrown when web site is under maintenance. This
     You must remember that this only works if Symfony2 works.        
     
 ----------------------
+
+Using with a Load Balancer
+---------------------
+Some load balancers will monitor the status code
+of the http response to stop forwarding traffic
+to your nodes.  If you are using a load balancer
+you may want to change the status code of the
+maintenance page to 200 so your users will still see
+something. You may change the response code of the status page from 503 by changing the **response.code** configuration.
+
 
 Service
 --------
