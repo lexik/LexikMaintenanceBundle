@@ -57,8 +57,10 @@ class MaintenanceListener
      * @param array $query Query arguments
      * @param String $route Route name
      * @param array $attributes Attributes
+     * @param Int $http_code http status code for response
+     * @param String $http_status http status message for response
      */
-    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array() , $http_code = null , $http_status = null )
+    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array(), $http_code = null, $http_status = null)
     {
         $this->driverFactory = $driverFactory;
         $this->path = $path;
@@ -67,7 +69,7 @@ class MaintenanceListener
         $this->query = $query;
         $this->route = $route;
         $this->attributes = $attributes;
-        $this->http_code  = $http_code;
+        $this->http_code = $http_code;
         $this->http_status = $http_status;
     }
 
@@ -125,11 +127,17 @@ class MaintenanceListener
         return;
     }
 
+    /**
+     * Rewrites the http code of the response
+     *
+     * @param FilterResponseEvent $event FilterResponseEvent
+     * @return void
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if( $this->handleResponse && $this->http_code !== null ){
+        if ($this->handleResponse && $this->http_code !== null) {
             $response = $event->getResponse();
-            $response->setStatusCode( $this->http_code , $this->http_status );
+            $response->setStatusCode($this->http_code, $this->http_status);
         }
     }
 
