@@ -7,7 +7,7 @@ use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
@@ -37,6 +37,9 @@ class MaintenanceListener
     protected $query;
     protected $route;
     protected $attributes;
+    protected $http_code;
+    protected $http_status;
+    protected $handleResponse = false;
 
     /**
      * Constructor Listener
@@ -54,8 +57,10 @@ class MaintenanceListener
      * @param array $query Query arguments
      * @param String $route Route name
      * @param array $attributes Attributes
+     * @param Int $http_code http status code for response
+     * @param String $http_status http status message for response
      */
-    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array())
+    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array(), $http_code = null, $http_status = null)
     {
         $this->driverFactory = $driverFactory;
         $this->path = $path;
@@ -64,6 +69,8 @@ class MaintenanceListener
         $this->query = $query;
         $this->route = $route;
         $this->attributes = $attributes;
+        $this->http_code = $http_code;
+        $this->http_status = $http_status;
     }
 
     /**
@@ -113,10 +120,25 @@ class MaintenanceListener
         $driver = $this->driverFactory->getDriver();
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+            $this->handleResponse = true;
             throw new ServiceUnavailableException();
         }
 
         return;
+    }
+
+    /**
+     * Rewrites the http code of the response
+     *
+     * @param FilterResponseEvent $event FilterResponseEvent
+     * @return void
+     */
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        if ($this->handleResponse && $this->http_code !== null) {
+            $response = $event->getResponse();
+            $response->setStatusCode($this->http_code, $this->http_status);
+        }
     }
 
     /**

@@ -63,6 +63,16 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('response')
+                    ->children()
+                        ->integerNode('code')
+                            ->defaultValue( 503 )
+                        ->end()
+                        ->scalarNode('status')
+                            ->defaultValue( "Service Temporarily Unavailable")
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

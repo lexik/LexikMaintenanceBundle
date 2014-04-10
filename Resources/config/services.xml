@@ -14,10 +14,11 @@
             <argument type="service" id="lexik_maintenance.driver.database" />
             <argument type="service" id="translator.default" />
             <argument>%lexik_maintenance.driver%</argument>
-        </service> 
+        </service>
 
         <service id="lexik_maintenance.listener" class="%lexik_maintenance.listener.class%">
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+            <tag name="kernel.event_listener" event="kernel.request"  method="onKernelRequest" />
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
             <argument type="service" id="lexik_maintenance.driver.factory" />
             <argument>%lexik_maintenance.authorized.path%</argument>
             <argument>%lexik_maintenance.authorized.host%</argument>
@@ -25,6 +26,8 @@
             <argument>%lexik_maintenance.authorized.query%</argument>
             <argument>%lexik_maintenance.authorized.route%</argument>
             <argument>%lexik_maintenance.authorized.attributes%</argument>
-        </service>	
+            <argument>%lexik_maintenance.response.http_code%</argument>
+            <argument>%lexik_maintenance.response.http_status%</argument>
+        </service>
     </services>
 </container>
