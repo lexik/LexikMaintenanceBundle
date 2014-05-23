@@ -31,15 +31,56 @@ class MaintenanceListener
      * @var array
      */
     protected $authorizedIps;
+
+    /**
+     * @var null|String
+     */
     protected $path;
+
+    /**
+     * @var null|String
+     */
     protected $host;
+
+    /**
+     * @var array|null
+     */
     protected $ips;
+
+    /**
+     * @var array
+     */
     protected $query;
+
+    /**
+     * @var null|String
+     */
     protected $route;
+
+    /**
+     * @var array
+     */
     protected $attributes;
+
+    /**
+     * @var Int|null
+     */
     protected $http_code;
+
+    /**
+     * @var null|String
+     */
     protected $http_status;
+
+    /**
+     * @var bool
+     */
     protected $handleResponse = false;
+
+    /**
+     * @var bool
+     */
+    protected $debug;
 
     /**
      * Constructor Listener
@@ -60,8 +101,18 @@ class MaintenanceListener
      * @param Int $http_code http status code for response
      * @param String $http_status http status message for response
      */
-    public function __construct(DriverFactory $driverFactory, $path = null, $host = null, $ips = null, $query = array(), $route = null, $attributes = array(), $http_code = null, $http_status = null)
-    {
+    public function __construct(
+        DriverFactory $driverFactory,
+        $path = null,
+        $host = null,
+        $ips = null,
+        $query = array(),
+        $route = null,
+        $attributes = array(),
+        $http_code = null,
+        $http_status = null,
+        $debug = false
+    ) {
         $this->driverFactory = $driverFactory;
         $this->path = $path;
         $this->host = $host;
@@ -71,6 +122,7 @@ class MaintenanceListener
         $this->attributes = $attributes;
         $this->http_code = $http_code;
         $this->http_status = $http_status;
+        $this->debug = $debug;
     }
 
     /**
@@ -112,7 +164,8 @@ class MaintenanceListener
             return;
         }
 
-        if (null !== $this->route && !preg_match('{'.$this->route.'}', $request->get('_route'))) {
+        $route = $request->get('_route');
+        if (null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
             return;
         }
 

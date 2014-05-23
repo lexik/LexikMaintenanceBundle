@@ -28,6 +28,7 @@
             <argument>%lexik_maintenance.authorized.attributes%</argument>
             <argument>%lexik_maintenance.response.http_code%</argument>
             <argument>%lexik_maintenance.response.http_status%</argument>
+            <argument>%kernel.debug%</argument>
         </service>
     </services>
 </container>
