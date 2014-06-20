@@ -157,6 +157,52 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider routeProviderWithDebugContext
+     */
+    public function testRouteFilter($debug, $route, $expected)
+    {
+        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+
+        $request = Request::create('');
+        $request->attributes->set('_route', $route);
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->container = $this->initContainer();
+
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array(), $debug);
+
+        $info = sprintf('Should be %s route %s with when we are %s debug env',
+            $expected === true ? 'allow' : 'deny',
+            $route,
+            $debug === true ? 'in' : 'not in'
+        );
+
+        $this->assertTrue($listener->onKernelRequest($event) === $expected, $info);
+    }
+
+    public function routeProviderWithDebugContext()
+    {
+        $debug = array(true, false);
+        $routes = array('route_1', '_route_started_with_underscore');
+
+        $data = array();
+
+        foreach ($debug as $isDebug) {
+            foreach ($routes as $route) {
+                $data[] = array($isDebug, $route, (true === $isDebug && '_' === $route[0]) ? false : true);
+            }
+        }
+
+        return $data;
+    }
+
+
+    /**
      * Create request and test the listener
      * for scenarios with permissive firewall
      * and query filters
