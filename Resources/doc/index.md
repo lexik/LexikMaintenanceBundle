@@ -37,7 +37,11 @@ line to your composer.json file
 
 Then update the vendor libraries:
 
-    php composer.phar update
+```shell
+composer.phar update
+# OR
+composer.phar update lexik/maintenance-bundle # to only update the bundle
+```
 
 
 ## Register the bundle
