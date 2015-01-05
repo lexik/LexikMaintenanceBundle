@@ -174,7 +174,10 @@ class MaintenanceListener
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this->handleResponse = true;
-            throw new ServiceUnavailableException();
+            $engine = $this->containerInterface->get('templating');
+            $content = $engine->render('::maintenance.html.twig');
+            $event->setResponse(new Response($content,503));
+            $event->stopPropagation();
         }
 
         return;
