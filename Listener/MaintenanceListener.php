@@ -5,6 +5,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Listener;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -24,6 +26,13 @@ class MaintenanceListener
      * @var \Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory
      */
     protected $driverFactory;
+    
+    /**
+     * Service container interface
+     *
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $containerInterface;
 
     /**
      * Authorized data
@@ -103,6 +112,7 @@ class MaintenanceListener
      */
     public function __construct(
         DriverFactory $driverFactory,
+        ContainerInterface $containerInterface,
         $path = null,
         $host = null,
         $ips = null,
@@ -114,6 +124,7 @@ class MaintenanceListener
         $debug = false
     ) {
         $this->driverFactory = $driverFactory;
+        $this->containerInterface = $containerInterface;
         $this->path = $path;
         $this->host = $host;
         $this->ips = $ips;
