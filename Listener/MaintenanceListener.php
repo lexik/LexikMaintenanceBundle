@@ -101,6 +101,7 @@ class MaintenanceListener
      *  incoming request.
      *
      * @param DriverFactory $driverFactory The driver factory
+     * @param ContainerInterface $containerInterface The container interface
      * @param String $path A regex for the path
      * @param String $host A regex for the host
      * @param array $ips The list of IP addresses
