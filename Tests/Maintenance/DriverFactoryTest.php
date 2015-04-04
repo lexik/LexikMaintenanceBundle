@@ -68,7 +68,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container->set('lexik_maintenance.driver.factory', $factory);
 
         try {
-           $factory->getDriver();
+            $factory->getDriver();
         } catch (\ErrorException $expected) {
             return;
         }
@@ -95,7 +95,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-       return $db;
+        return $db;
     }
 
     public function getTranslator()
