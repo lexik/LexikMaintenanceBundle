@@ -87,6 +87,9 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver 
             options: {file_path: %kernel.root_dir%/cache/lock}                         # file_path is the complete path for create the file
              
+             # Shared memory driver
+            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\ShmDriver'                 # class for shared memory driver 
+             
              # MemCache driver
             class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver 
             options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
