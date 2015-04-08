@@ -136,7 +136,7 @@ class MaintenanceListener
     {
         $request = $event->getRequest();
 
-        if(is_array($this->query)) {
+        if (is_array($this->query)) {
             foreach ($this->query as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
                     return;
@@ -144,7 +144,7 @@ class MaintenanceListener
             }
         }
 
-        if(is_array($this->attributes)) {
+        if (is_array($this->attributes)) {
             foreach ($this->attributes as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
                     return;

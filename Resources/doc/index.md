@@ -100,7 +100,7 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
             options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password 
 
-        #Optional. response code and status of the mantainence page
+        #Optional. response code and status of the maintenance page
         response:
             code: 503 
             status: "Service Temporarily Unavailable"    

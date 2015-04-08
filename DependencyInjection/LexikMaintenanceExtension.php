@@ -53,7 +53,7 @@ class LexikMaintenanceExtension extends Extension
     /**
      * Load dsn configuration
      *
-     * @param array $config A configuration array
+     * @param array $options A configuration array
      *
      * @throws InvalidArgumentException
      */

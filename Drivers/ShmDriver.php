@@ -112,7 +112,6 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageLock($resultTest)
     {
-        $message = '';
         if ($resultTest) {
             $message = $this->trans->trans('lexik_maintenance.success_lock_shm', array(), 'maintenance');
         } else {
@@ -127,7 +126,6 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageUnlock($resultTest)
     {
-        $message = '';
         if ($resultTest) {
             $message = $this->trans->trans('lexik_maintenance.success_unlock', array(), 'maintenance');
         } else {
