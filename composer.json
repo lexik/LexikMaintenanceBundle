@@ -27,5 +27,10 @@
     "autoload":     {
         "psr-0": { "Lexik\\Bundle\\MaintenanceBundle": "" }
     },
-    "target-dir": "Lexik/Bundle/MaintenanceBundle"
+    "target-dir": "Lexik/Bundle/MaintenanceBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
