@@ -121,6 +121,14 @@ This command will enable the maintenance according with your configuration. You 
 
 This command will disable the maintenance
 
+You can execute the lock without a warning message which you need to interact with:
+    
+    app/console lexik:maintenance:lock --no-interaction
+
+Or (with the optional ttl overwriting)
+
+    app/console lexik:maintenance:lock 3600 -n
+
          
 ---------------------
 
