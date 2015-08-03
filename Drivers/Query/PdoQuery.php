@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-abstract class PdoDriver
+abstract class PdoQuery
 {
     /**
      * @var \PDO

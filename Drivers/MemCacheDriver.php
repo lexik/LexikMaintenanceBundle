@@ -34,12 +34,11 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * Constructor memCacheDriver
      *
-     * @param Translator $translator Translator service
-     * @param array      $options    Options driver
+     * @param array $options    Options driver
      */
-    public function __construct($translator, array $options = array())
+    public function __construct(array $options = array())
     {
-        parent::__construct($translator, $options);
+        parent::__construct($options);
 
         if ( ! isset($options['key_name'])) {
             throw new \InvalidArgumentException('$options[\'key_name\'] must be defined if Driver Memcache configuration is used');
@@ -97,14 +96,9 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_lock_memc', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_lock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_lock_memc' : 'lexik_maintenance.not_success_lock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**
@@ -112,14 +106,9 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageUnlock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_unlock', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_unlock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**

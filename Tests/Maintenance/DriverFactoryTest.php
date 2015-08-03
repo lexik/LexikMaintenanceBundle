@@ -79,11 +79,12 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-                                        'kernel.debug'       => false,
-                                        'kernel.bundles'     => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-                                        'kernel.cache_dir'   => sys_get_temp_dir(),
-                                        'kernel.environment' => 'dev',
-                                        'kernel.root_dir'    => __DIR__.'/../../../../' // src dir
+            'kernel.debug'          => false,
+            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir'      => sys_get_temp_dir(),
+            'kernel.environment'    => 'dev',
+            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.default_locale' => 'fr',
         )));
 
         return $container;

@@ -3,6 +3,8 @@
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
+use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 
 /**
  * Class driver for handle database
@@ -12,8 +14,19 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
  */
 class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 {
+    /**
+     * @var Registry
+     */
     protected $doctrine;
+
+    /**
+     * @var array
+     */
     protected $options;
+
+    /**
+     * @var string
+     */
     protected $db;
 
     /**
@@ -119,14 +132,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_lock_database', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_lock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_lock_database' : 'lexik_maintenance.not_success_lock';
 
-        return $message;
+        return $this->trans->trans($key, array(), 'maintenance');
     }
 
     /**
@@ -134,14 +142,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageUnlock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_unlock', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_unlock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
 
-        return $message;
+        return $this->trans->trans($key, array(), 'maintenance');
     }
 
     /**

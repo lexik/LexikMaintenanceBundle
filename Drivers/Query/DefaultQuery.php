@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 
 use Doctrine\ORM\EntityManager;
 

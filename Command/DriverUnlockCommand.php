@@ -15,8 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 class DriverUnlockCommand extends ContainerAwareCommand
 {
     /**
-     * (non-PHPdoc)
-     * @see Symfony\Component\Console\Command.Command::configure()
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -32,12 +31,13 @@ EOT
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Symfony\Component\Console\Command.Command::execute()
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->unlock($input, $output);
+        if (!$this->confirmUnlock($input, $output)) {
+            return;
+        }
 
         $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
 
@@ -47,17 +47,18 @@ EOT
     }
 
     /**
-    * (non-PHPdoc)
-    */
-    protected function unlock(InputInterface $input, OutputInterface $output)
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return bool
+     */
+    protected function confirmUnlock(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
         $formatter = $this->getHelperSet()->get('formatter');
 
         if ($input->getOption('no-interaction', false)) {
             $confirmation = true;
-        }
-        else {
+        } else {
             // confirm
             $output->writeln(array(
                 '',
@@ -72,11 +73,10 @@ EOT
             );
         }
 
-        if ($confirmation) {
-            return;
-        } else {
+        if (!$confirmation) {
             $output->writeln('<error>Action cancelled!</error>');
-            exit;
         }
+
+        return $confirmation;
     }
 }

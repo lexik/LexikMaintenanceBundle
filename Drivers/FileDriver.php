@@ -11,12 +11,11 @@ class FileDriver extends AbstractDriver
     /**
      * Constructor
      *
-     * @param Translator $translator Translator service
-     * @param array      $options    Options driver
+     * @param array $options    Options driver
      */
-    public function __construct($translator, array $options = array())
+    public function __construct(array $options = array())
     {
-        parent::__construct($translator, $options);
+        parent::__construct($options);
 
         if ( ! isset($options['file_path'])) {
             throw new \InvalidArgumentException('$options[\'file_path\'] cannot be defined if Driver File configuration is used');
@@ -29,8 +28,7 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createLock()
+     * {@inheritDoc}
      */
     protected function createLock()
     {
@@ -38,8 +36,7 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::createUnlock()
+     * {@inheritDoc}
      */
     protected function createUnlock()
     {
@@ -47,8 +44,7 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::isExists()
+     * {@inheritDoc}
      */
     public function isExists()
     {
@@ -84,34 +80,22 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageLock()
+     * {@inheritDoc}
      */
     public function getMessageLock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_lock_file', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_lock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_lock_file' : 'lexik_maintenance.not_success_lock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Lexik\Bundle\MaintenanceBundle\Drivers.AbstractDriver::getMessageUnlock()
+     * {@inheritDoc}
      */
     public function getMessageUnlock($resultTest)
     {
-        $message = '';
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_unlock', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_unlock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 }

@@ -40,13 +40,15 @@ class FileDriverTest extends TestCase
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock');
 
-        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM = new FileDriver($options);
+        $fileM->setTranslator($this->getTranslator());
 
         $this->assertTrue($fileM->decide());
 
         $options = array('file_path' => self::$tmpDir.'/clok');
 
-        $fileM2 = new FileDriver($this->getTranslator(), $options);
+        $fileM2 = new FileDriver($options);
+        $fileM2->setTranslator($this->getTranslator());
         $this->assertFalse($fileM2->decide());
     }
 
@@ -55,14 +57,16 @@ class FileDriverTest extends TestCase
      */
     public function testExceptionInvalidPath()
     {
-        $fileM = new FileDriver($this->getTranslator(), array());
+        $fileM = new FileDriver(array());
+        $fileM->setTranslator($this->getTranslator());
     }
 
     public function testLock()
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock');
 
-        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM = new FileDriver($options);
+        $fileM->setTranslator($this->getTranslator());
         $fileM->lock();
 
         $this->assertFileExists($options['file_path']);
@@ -72,7 +76,8 @@ class FileDriverTest extends TestCase
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock');
 
-        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM = new FileDriver($options);
+        $fileM->setTranslator($this->getTranslator());
         $fileM->lock();
 
         $fileM->unlock();
@@ -84,7 +89,8 @@ class FileDriverTest extends TestCase
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
 
-        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM = new FileDriver($options);
+        $fileM->setTranslator($this->getTranslator());
         $fileM->lock();
 
         $this->assertTrue($fileM->isEndTime(3600));
@@ -94,7 +100,8 @@ class FileDriverTest extends TestCase
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
 
-        $fileM = new FileDriver($this->getTranslator(), $options);
+        $fileM = new FileDriver($options);
+        $fileM->setTranslator($this->getTranslator());
         $fileM->lock();
 
         // lock
@@ -114,11 +121,12 @@ class FileDriverTest extends TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-                                        'kernel.debug'       => false,
-                                        'kernel.bundles'     => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-                                        'kernel.cache_dir'   => sys_get_temp_dir(),
-                                        'kernel.environment' => 'dev',
-                                        'kernel.root_dir'    => __DIR__.'/../../../../' // src dir
+            'kernel.debug'          => false,
+            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir'      => sys_get_temp_dir(),
+            'kernel.environment'    => 'dev',
+            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.default_locale' => 'fr',
         )));
 
         return $container;
