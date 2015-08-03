@@ -112,13 +112,9 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageLock($resultTest)
     {
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_lock_shm', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_lock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_lock_shm' : 'lexik_maintenance.not_success_lock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**
@@ -126,12 +122,8 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageUnlock($resultTest)
     {
-        if ($resultTest) {
-            $message = $this->trans->trans('lexik_maintenance.success_unlock', array(), 'maintenance');
-        } else {
-            $message = $this->trans->trans('lexik_maintenance.not_success_unlock', array(), 'maintenance');
-        }
+        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
 
-        return $message;
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 }

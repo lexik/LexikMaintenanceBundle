@@ -134,7 +134,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     {
         $key = $resultTest ? 'lexik_maintenance.success_lock_database' : 'lexik_maintenance.not_success_lock';
 
-        return $this->trans->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**
@@ -144,7 +144,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     {
         $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
 
-        return $this->trans->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, array(), 'maintenance');
     }
 
     /**
