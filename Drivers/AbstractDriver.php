@@ -2,7 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Abstract class for drivers
@@ -18,20 +18,18 @@ abstract class AbstractDriver
     protected $options;
 
     /**
-     * @var Translator
+     * @var TranslatorInterface
      */
-    protected $trans;
+    protected $translator;
 
     /**
      * Constructor
      *
-     * @param Translator $trans   Translator service
-     * @param array      $options Array of options
+     * @param array $options Array of options
      */
-    public function __construct(Translator $trans, array $options = array())
+    public function __construct(array $options = array())
     {
         $this->options = $options;
-        $this->trans   = $trans;
     }
 
     /**
@@ -122,12 +120,12 @@ abstract class AbstractDriver
     }
 
     /**
-     * Set translator
+     * Set translatorlator
      *
-     * @param Translator $trans Translator service
+     * @param TranslatorInterface $translator
      */
-    public function setTranslator(Translator $trans)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        $this->trans = $trans;
+        $this->translator = $translator;
     }
 }

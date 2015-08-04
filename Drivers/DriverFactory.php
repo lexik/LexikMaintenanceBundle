@@ -2,11 +2,9 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver\DatabaseDriverInterface;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Factory for create driver
@@ -16,29 +14,41 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
  */
 class DriverFactory
 {
-    protected $driver;
-    protected $dbDriver;
-    protected $trans;
+    /**
+     * @var array
+     */
+    protected $driverOptions;
 
-    const DATABASE_DRIVER = "Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver";
+    /**
+     * @var DatabaseDriver
+     */
+    protected $dbDriver;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    const DATABASE_DRIVER = 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
      * Constructor driver factory
      *
-     * @param DatabaseDriver $dbDriver      The databaseDriver Service
-     * @param Translator     $trans         The translator service
-     * @param array          $driverOptions Options driver
+     * @param DatabaseDriver      $dbDriver The databaseDriver Service
+     * @param TranslatorInterface $translator The translator service
+     * @param array               $driverOptions Options driver
+     * @throws \ErrorException
      */
-    public function __construct(DatabaseDriver $dbDriver, Translator $trans, array $driverOptions)
+    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, array $driverOptions)
     {
-        $this->driver = $driverOptions;
+        $this->driverOptions = $driverOptions;
 
-        if ( ! isset($this->driver['class'])) {
+        if ( ! isset($this->driverOptions['class'])) {
             throw new \ErrorException('You need to define a driver class');
         }
 
         $this->dbDriver = $dbDriver;
-        $this->trans    = $trans;
+        $this->translator = $translator;
     }
 
     /**
@@ -49,17 +59,21 @@ class DriverFactory
      */
     public function getDriver()
     {
-        $class = $this->driver['class'];
-        if (class_exists($class)) {
-            if ($class === self::DATABASE_DRIVER) {
-                $driver = $this->dbDriver;
-                $driver->setOptions($this->driver['options']);
-                $driver->setTranslator($this->trans);
-                return $driver;
-            }
-            return new $class($this->trans, $this->driver['options']);
-        } else {
+        $class = $this->driverOptions['class'];
+
+        if (!class_exists($class)) {
             throw new \ErrorException("Class '".$class."' not found in ".get_class($this));
         }
+
+        if ($class === self::DATABASE_DRIVER) {
+            $driver = $this->dbDriver;
+            $driver->setOptions($this->driverOptions['options']);
+        } else {
+            $driver = new $class($this->driverOptions['options']);
+        }
+
+        $driver->setTranslator($this->translator);
+
+        return $driver;
     }
 }

@@ -57,7 +57,7 @@ EOT
         if ($input->isInteractive()) {
             if (!$dialog->askConfirmation($output, '<question>WARNING! Are you sure you wish to continue? (y/n)</question>', 'y')) {
                 $output->writeln('<error>Maintenance cancelled!</error>');
-                exit;
+                return;
             }
         } elseif (null !== $input->getArgument('ttl')) {
             $this->ttl = $input->getArgument('ttl');
