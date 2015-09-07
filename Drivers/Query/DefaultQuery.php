@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DefaultQuery extends PdoDriver
+class DefaultQuery extends PdoQuery
 {
     /**
      * @var EntityManager
