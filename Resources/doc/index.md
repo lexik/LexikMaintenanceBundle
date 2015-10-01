@@ -16,8 +16,8 @@ You must register in your autoloader:
 
 
     <?php
-    
-    // app/autoload.php    
+
+    // app/autoload.php
     $loader->registerNamespaces(array(
         'Lexik'            => __DIR__.'/../vendor/bundles',
         // ...
@@ -31,7 +31,7 @@ line to your composer.json file
 
     {
         "require": {
-        	"lexik/maintenance-bundle": "dev-master" 
+            "lexik/maintenance-bundle": "dev-master"
         }
     }
 
@@ -49,14 +49,14 @@ composer.phar update lexik/maintenance-bundle # to only update the bundle
 You must register the bundle in your kernel:
 
     <?php
-    
-    // app/AppKernel.php    
+
+    // app/AppKernel.php
     public function registerBundles()
     {
-        $bundles = array(    
-            // ...    
+        $bundles = array(
+            // ...
             new Lexik\Bundle\MaintenanceBundle\LexikMaintenanceBundle(),
-        );    
+        );
         // ...
     }
 
@@ -78,37 +78,38 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             host: your-domain.com                                               # Optional. Authorized domain, accepts regexs
             ips: ['127.0.0.1', '172.123.10.14']                                 # Optional. Authorized ip addresses
             query: { foo: bar }                                                 # Optional. Authorized request query parameter (GET/POST)
+            cookie: { bar: baz }                                                # Optional. Authorized cookie
             route:                                                              # Optional. Authorized route name
             attributes:                                                         # Optional. Authorized route attributes
-        driver:      
+        driver:
             ttl: 3600                                                                  # Optional ttl option, can be not set
-                                                                              
-             # File driver    
-            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver 
+
+             # File driver
+            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver'                # class for file driver
             options: {file_path: %kernel.root_dir%/cache/lock}                         # file_path is the complete path for create the file
-             
+
              # Shared memory driver
-            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\ShmDriver'                 # class for shared memory driver 
-             
+            class: '\Lexik\Bundle\MaintenanceBundle\Drivers\ShmDriver'                 # class for shared memory driver
+
              # MemCache driver
-            class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver 
+            class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver
             options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
-      
-            # Database driver:               
+
+            # Database driver:
             class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
-            
-            # Option 1 : for doctrine   
+
+            # Option 1 : for doctrine
             options: {connection: custom}                                            # Optional. You can choice an other connection. Without option it's the doctrine default connection who will be used
-            
+
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
-            options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password 
+            options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password
 
         #Optional. response code and status of the maintenance page
         response:
-            code: 503 
-            status: "Service Temporarily Unavailable"    
-     
-     
+            code: 503
+            status: "Service Temporarily Unavailable"
+
+
 ### Commands
 
 There are two commands:
@@ -122,14 +123,14 @@ This command will enable the maintenance according with your configuration. You 
 This command will disable the maintenance
 
 You can execute the lock without a warning message which you need to interact with:
-    
+
     lexik:maintenance:lock --no-interaction
 
 Or (with the optional ttl overwriting)
 
     lexik:maintenance:lock 3600 -n
 
-         
+
 ---------------------
 
 Custom error page 503
@@ -137,14 +138,14 @@ Custom error page 503
 
 In the listener, an exception is thrown when web site is under maintenance. This exception is a 'This exception is a 'HttpException' (status 503), to custom your error page
  you need to create a error503.html.twig (if you use twig) in:
-    app/Resources/TwigBundle/views/Exception   
-        
+    app/Resources/TwigBundle/views/Exception
+
 #### Important
 
 .. note::
 
-    You must remember that this only works if Symfony2 works.        
-    
+    You must remember that this only works if Symfony2 works.
+
 ----------------------
 
 Using with a Load Balancer
@@ -175,6 +176,6 @@ In your controller:
     $this->get('session')->setFlash('maintenance', $message);
 
     return new RedirectResponse($this->generateUrl('_demo'));
-        
-        
+
+
 **Warning**: Make sure you have allowed IP addresses if you run maintenance from the backend, otherwise you will find yourself blocked on page 503.

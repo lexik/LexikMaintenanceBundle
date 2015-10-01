@@ -53,6 +53,11 @@ class MaintenanceListener
     protected $query;
 
     /**
+     * @var array
+     */
+    protected $cookie;
+
+    /**
      * @var null|String
      */
     protected $route;
@@ -96,10 +101,12 @@ class MaintenanceListener
      * @param String $host A regex for the host
      * @param array $ips The list of IP addresses
      * @param array $query Query arguments
+     * @param array $cookie Cookies
      * @param String $route Route name
      * @param array $attributes Attributes
      * @param Int $http_code http status code for response
      * @param String $http_status http status message for response
+     * @param bool $debug
      */
     public function __construct(
         DriverFactory $driverFactory,
@@ -107,6 +114,7 @@ class MaintenanceListener
         $host = null,
         $ips = null,
         $query = array(),
+        $cookie = array(),
         $route = null,
         $attributes = array(),
         $http_code = null,
@@ -118,6 +126,7 @@ class MaintenanceListener
         $this->host = $host;
         $this->ips = $ips;
         $this->query = $query;
+        $this->cookie = $cookie;
         $this->route = $route;
         $this->attributes = $attributes;
         $this->http_code = $http_code;
@@ -139,6 +148,14 @@ class MaintenanceListener
         if (is_array($this->query)) {
             foreach ($this->query as $key => $pattern) {
                 if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
+                    return;
+                }
+            }
+        }
+
+        if (is_array($this->cookie)) {
+            foreach ($this->cookie as $key => $pattern) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->cookies->get($key))) {
                     return;
                 }
             }
