@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="lexik_maintenance.listener.class">Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener</parameter>
-        <parameter key="lexik_maintenance.driver_factory.class">Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory</parameter>       
+        <parameter key="lexik_maintenance.driver_factory.class">Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory</parameter>
     </parameters>
 
     <services>
@@ -24,6 +24,7 @@
             <argument>%lexik_maintenance.authorized.host%</argument>
             <argument>%lexik_maintenance.authorized.ips%</argument>
             <argument>%lexik_maintenance.authorized.query%</argument>
+            <argument>%lexik_maintenance.authorized.cookie%</argument>
             <argument>%lexik_maintenance.authorized.route%</argument>
             <argument>%lexik_maintenance.authorized.attributes%</argument>
             <argument>%lexik_maintenance.response.http_code%</argument>
