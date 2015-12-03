@@ -5,12 +5,27 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - hhvm
 
-env:
-  - SYMFONY_VERSION=2.7.*
+sudo: false
 
-before_script:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
-  - composer update --dev --prefer-source
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.3
+      env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
+    - php: 5.6
+      env: SYMFONY_VERSION='2.8.*'
+
+before_install:
+  - composer self-update
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev symfony/framework-bundle:${SYMFONY_VERSION} --no-update; fi
+
+install: composer update $COMPOSER_FLAGS
 
 script: phpunit
