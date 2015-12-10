@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="Tests/bootstrap.php"
+         bootstrap="vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="LexikMaintenanceBundle Test Suite">
@@ -17,7 +17,7 @@
         </testsuite>
     </testsuites>
     <filter>
-    
+
         <whitelist>
             <directory>./</directory>
             <exclude>
@@ -26,7 +26,7 @@
             </exclude>
         </whitelist>
     </filter>
-    
+
     <php>
         <server name="ROOT_DIR" value="../../../../.." />
     </php>
