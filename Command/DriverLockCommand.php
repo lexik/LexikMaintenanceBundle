@@ -51,11 +51,10 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
         $driver = $this->getDriver();
 
         if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, '<question>WARNING! Are you sure you wish to continue? (y/n)</question>', 'y')) {
+            if (!$this->askConfirmation('WARNING! Are you sure you wish to continue? (y/n)', $input, $output)) {
                 $output->writeln('<error>Maintenance cancelled!</error>');
                 return;
             }
@@ -81,7 +80,6 @@ EOT
         $driver = $this->getDriver();
         $default = $driver->getOptions();
 
-        $dialog = $this->getHelperSet()->get('dialog');
         $formatter = $this->getHelperSet()->get('formatter');
 
         if (null !== $input->getArgument('ttl') && !is_numeric($input->getArgument('ttl'))) {
@@ -104,7 +102,8 @@ EOT
                     '',
                 ));
 
-                $ttl = $dialog->askAndValidate(
+                $ttl = $this->askAndValidate(
+                    $input,
                     $output,
                     sprintf('<info>%s</info> [<comment>Default value in your configuration: %s</comment>]%s ', 'Set time', $driver->hasTtl() ? $driver->getTtl() : 'unlimited', ':'),
                     function($value) use ($default) {
@@ -139,5 +138,50 @@ EOT
     private function getDriver()
     {
         return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+    }
+
+    /**
+     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
+     * but use the ConfirmationQuestion when available.
+     *
+     * @param $question
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return mixed
+     */
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+        if (!$this->getHelperSet()->has('question')) {
+            return $this->getHelper('dialog')
+                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+        }
+
+        return $this->getHelper('question')
+            ->ask($input, $output, new \Symfony\Component\Console\Question\ConfirmationQuestion($question));
+    }
+
+    /**
+     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
+     * but use the ConfirmationQuestion when available.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param $question
+     * @param $validator
+     * @param bool $attempts
+     * @param null $default
+     * @return mixed
+     */
+    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = false, $default = null) {
+        if (!$this->getHelperSet()->has('question')) {
+            return $this->getHelper('dialog')
+                ->askAndValidate($output, $question, $validator, $attempts, $default);
+        }
+
+        $question = new \Symfony\Component\Console\Question\Question($question, $default);
+        $question->setValidator($validator);
+        $question->setMaxAttempts($attempts);
+
+        return $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }

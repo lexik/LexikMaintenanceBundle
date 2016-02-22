@@ -53,7 +53,6 @@ EOT
      */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
         $formatter = $this->getHelperSet()->get('formatter');
 
         if ($input->getOption('no-interaction', false)) {
@@ -66,10 +65,10 @@ EOT
                 '',
             ));
 
-            $confirmation = $dialog->askConfirmation(
-                $output,
-                '<question>WARNING! Are you sure you wish to continue? (y/n) </question>',
-                'y'
+            $confirmation = $this->askConfirmation(
+                'WARNING! Are you sure you wish to continue? (y/n) ',
+                $input,
+                $output
             );
         }
 
@@ -78,5 +77,24 @@ EOT
         }
 
         return $confirmation;
+    }
+
+    /**
+     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
+     * but use the ConfirmationQuestion when available.
+     *
+     * @param $question
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return mixed
+     */
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+        if (!$this->getHelperSet()->has('question')) {
+            return $this->getHelper('dialog')
+                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+        }
+
+        return $this->getHelper('question')
+            ->ask($input, $output, new \Symfony\Component\Console\Question\ConfirmationQuestion($question));
     }
 }
