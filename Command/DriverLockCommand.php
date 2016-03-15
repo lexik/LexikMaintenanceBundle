@@ -114,7 +114,7 @@ EOT
                         }
                         return $value;
                     },
-                    false,
+                    1,
                     isset($default['ttl']) ? $default['ttl'] : 0
                 );
             }
@@ -167,11 +167,11 @@ EOT
      * @param OutputInterface $output
      * @param $question
      * @param $validator
-     * @param bool $attempts
+     * @param int $attempts
      * @param null $default
      * @return mixed
      */
-    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = false, $default = null) {
+    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null) {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
                 ->askAndValidate($output, $question, $validator, $attempts, $default);
