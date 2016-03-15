@@ -36,7 +36,9 @@ class DsnQuery extends PdoQuery
      */
     public function createTableQuery()
     {
-        $this->db->exec(sprintf('CREATE TABLE IF NOT EXISTS %s (ttl datetime DEFAULT NULL)', $this->options['table']));
+        $type = $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) != 'mysql' ? 'timestamp' : 'datetime';
+
+        $this->db->exec(sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', $this->options['table'], $type));
     }
 
     /**
