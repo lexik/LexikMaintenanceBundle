@@ -2,8 +2,6 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
-use Symfony\Component\Config\FileLocator;
-
 class FileDriver extends AbstractDriver
 {
     protected $filePath;
