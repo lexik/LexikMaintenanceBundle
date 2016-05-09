@@ -94,7 +94,7 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    public function isExists()
+    public function isLocked()
     {
         if ($this->shmId) {
             if (!shm_has_var($this->shmId, self::VARIABLE_KEY) ) {

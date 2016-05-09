@@ -82,7 +82,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function isExists()
+    public function isLocked()
     {
         if (false !== $this->memcacheInstance->get($this->keyName)) {
             return true;

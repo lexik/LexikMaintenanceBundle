@@ -85,7 +85,7 @@ class FileDriverTest extends TestCase
         $this->assertFileNotExists($options['file_path']);
     }
 
-    public function testIsExists()
+    public function testIsLocked()
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
 

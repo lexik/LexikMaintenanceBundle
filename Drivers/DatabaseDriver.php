@@ -106,7 +106,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function isExists()
+    public function isLocked()
     {
         $db = $this->pdoDriver->initDb();
         $data = $this->pdoDriver->selectQuery($db);

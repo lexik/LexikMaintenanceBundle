@@ -33,11 +33,11 @@ abstract class AbstractDriver
     }
 
     /**
-     * Test if object exists
+     * Test if is locked
      *
      * @return boolean
      */
-    abstract public function isExists();
+    abstract public function isLocked();
 
     /**
      * Result of creation of lock
@@ -78,7 +78,7 @@ abstract class AbstractDriver
      */
     public function lock()
     {
-        if (!$this->isExists()) {
+        if (!$this->isLocked()) {
             return $this->createLock();
         } else {
             return false;
@@ -92,21 +92,11 @@ abstract class AbstractDriver
      */
     public function unlock()
     {
-        if ($this->isExists()) {
+        if ($this->isLocked()) {
             return $this->createUnlock();
         } else {
             return false;
         }
-    }
-
-    /**
-     * the choice of the driver to less pass or not the user
-     *
-     * @return boolean
-     */
-    public function decide()
-    {
-        return ($this->isExists());
     }
 
     /**

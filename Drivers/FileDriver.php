@@ -44,7 +44,7 @@ class FileDriver extends AbstractDriver
     /**
      * {@inheritDoc}
      */
-    public function isExists()
+    public function isLocked()
     {
         if (file_exists($this->filePath)) {
             if (isset($this->options['ttl']) && is_numeric($this->options['ttl'])) {

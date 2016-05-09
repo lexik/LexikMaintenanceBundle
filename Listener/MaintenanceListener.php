@@ -2,13 +2,11 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Listener;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
-
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
  * Listener to decide if user can access to the site
@@ -143,58 +141,62 @@ class MaintenanceListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if(!$event->isMasterRequest()){
+        if (!$event->isMasterRequest()) {
             return;
         }
 
         $request = $event->getRequest();
-
-        if (is_array($this->query)) {
-            foreach ($this->query as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
-                    return;
-                }
-            }
-        }
-
-        if (is_array($this->cookie)) {
-            foreach ($this->cookie as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->cookies->get($key))) {
-                    return;
-                }
-            }
-        }
-
-        if (is_array($this->attributes)) {
-            foreach ($this->attributes as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
-                    return;
-                }
-            }
-        }
-
-        if (null !== $this->path && !empty($this->path) && preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
-            return;
-        }
-
-        if (null !== $this->host && !empty($this->host) && preg_match('{'.$this->host.'}i', $request->getHost())) {
-            return;
-        }
-
-        if (count($this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
-            return;
-        }
-
         $route = $request->get('_route');
-        if (null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
+
+        if (true === $this->debug && '_' === $route[0]) {
             return;
         }
 
         // Get driver class defined in your configuration
+        /** @var AbstractDriver $driver */
         $driver = $this->driverFactory->getDriver();
 
-        if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $this->handleResponse = true;
+        if ($driver->isLocked()) {
+            if (is_array($this->query)) {
+                foreach ($this->query as $key => $pattern) {
+                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->get($key))) {
+                        return;
+                    }
+                }
+            }
+
+            if (is_array($this->cookie)) {
+                foreach ($this->cookie as $key => $pattern) {
+                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->cookies->get($key))) {
+                        return;
+                    }
+                }
+            }
+
+            if (is_array($this->attributes)) {
+                foreach ($this->attributes as $key => $pattern) {
+                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->attributes->get($key))) {
+                        return;
+                    }
+                }
+            }
+
+            if (null !== $this->path && !empty($this->path) && preg_match('{' . $this->path . '}', rawurldecode($request->getPathInfo()))) {
+                return;
+            }
+
+            if (null !== $this->host && !empty($this->host) && preg_match('{' . $this->host . '}i', $request->getHost())) {
+                return;
+            }
+
+            if (count($this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
+                return;
+            }
+
+            if (null !== $this->route && preg_match('{' . $this->route . '}', $route) || (true === $this->debug && '_' === $route[0])) {
+                return;
+            }
+
             throw new ServiceUnavailableException();
         }
 
@@ -202,25 +204,12 @@ class MaintenanceListener
     }
 
     /**
-     * Rewrites the http code of the response
-     *
-     * @param FilterResponseEvent $event FilterResponseEvent
-     * @return void
-     */
-    public function onKernelResponse(FilterResponseEvent $event)
-    {
-        if ($this->handleResponse && $this->http_code !== null) {
-            $response = $event->getResponse();
-            $response->setStatusCode($this->http_code, $this->http_status);
-        }
-    }
-
-    /**
      * Checks if the requested ip is valid.
      *
      * @param string       $requestedIp
      * @param string|array $ips
-     * @return boolean
+     *
+     * @return bool
      */
     protected function checkIps($requestedIp, $ips)
     {
