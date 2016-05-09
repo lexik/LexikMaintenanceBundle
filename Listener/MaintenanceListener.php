@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
- * Listener to decide if user can access to the site
+ * Listener to decide if user can access to the site.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -17,14 +17,14 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class MaintenanceListener
 {
     /**
-     * Service driver factory
+     * Service driver factory.
      *
      * @var \Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory
      */
     protected $driverFactory;
 
     /**
-     * Authorized data
+     * Authorized data.
      *
      * @var array
      */
@@ -86,7 +86,7 @@ class MaintenanceListener
     protected $debug;
 
     /**
-     * Constructor Listener
+     * Constructor Listener.
      *
      * Accepts a driver factory, and several arguments to be compared against the
      * incoming request.
@@ -95,16 +95,16 @@ class MaintenanceListener
      *  incoming request.
      *
      * @param DriverFactory $driverFactory The driver factory
-     * @param String $path A regex for the path
-     * @param String $host A regex for the host
-     * @param array $ips The list of IP addresses
-     * @param array $query Query arguments
-     * @param array $cookie Cookies
-     * @param String $route Route name
-     * @param array $attributes Attributes
-     * @param Int $http_code http status code for response
-     * @param String $http_status http status message for response
-     * @param bool $debug
+     * @param String        $path          A regex for the path
+     * @param String        $host          A regex for the host
+     * @param array         $ips           The list of IP addresses
+     * @param array         $query         Query arguments
+     * @param array         $cookie        Cookies
+     * @param String        $route         Route name
+     * @param array         $attributes    Attributes
+     * @param Int           $http_code     http status code for response
+     * @param String        $http_status   http status message for response
+     * @param bool          $debug
      */
     public function __construct(
         DriverFactory $driverFactory,
@@ -135,7 +135,6 @@ class MaintenanceListener
     /**
      * @param GetResponseEvent $event GetResponseEvent
      *
-     * @return void
      *
      * @throws ServiceUnavailableException
      */

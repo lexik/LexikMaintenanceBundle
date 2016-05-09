@@ -5,7 +5,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Abstract class for drivers
+ * Abstract class for drivers.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -23,7 +23,7 @@ abstract class AbstractDriver
     protected $translator;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $options Array of options
      */
@@ -33,28 +33,28 @@ abstract class AbstractDriver
     }
 
     /**
-     * Test if is locked
+     * Test if is locked.
      *
      * @return boolean
      */
     abstract public function isLocked();
 
     /**
-     * Result of creation of lock
+     * Result of creation of lock.
      *
      * @return boolean
      */
     abstract protected function createLock();
 
     /**
-     * Result of create unlock
+     * Result of create unlock.
      *
      * @return boolean
      */
     abstract protected function createUnlock();
 
     /**
-     * The feedback message
+     * The feedback message.
      *
      * @param boolean $resultTest The result of lock
      *
@@ -63,7 +63,7 @@ abstract class AbstractDriver
     abstract public function getMessageLock($resultTest);
 
     /**
-     * The feedback message
+     * The feedback message.
      *
      * @param boolean $resultTest The result of unlock
      *
@@ -72,7 +72,7 @@ abstract class AbstractDriver
     abstract public function getMessageUnlock($resultTest);
 
     /**
-     * The response of lock
+     * The response of lock.
      *
      * @return boolean
      */
@@ -86,7 +86,7 @@ abstract class AbstractDriver
     }
 
     /**
-     * The response of unlock
+     * The response of unlock.
      *
      * @return boolean
      */
@@ -100,7 +100,7 @@ abstract class AbstractDriver
     }
 
     /**
-     * Options of driver
+     * Options of driver.
      *
      * @return array
      */
@@ -110,7 +110,7 @@ abstract class AbstractDriver
     }
 
     /**
-     * Set translatorlator
+     * Set translatorlator.
      *
      * @param TranslatorInterface $translator
      */

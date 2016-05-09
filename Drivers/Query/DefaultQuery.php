@@ -5,7 +5,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Default Class for handle database with a doctrine connection
+ * Default Class for handle database with a doctrine connection.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

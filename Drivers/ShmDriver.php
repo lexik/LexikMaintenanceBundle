@@ -3,7 +3,7 @@
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 /**
- * Class to handle a shared memory driver
+ * Class to handle a shared memory driver.
  *
  * @package LexikMaintenanceBundle
  * @author  Audrius Karabanovas <audrius@karabanovas.net>
@@ -11,21 +11,21 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 class ShmDriver extends AbstractDriver
 {
     /**
-     * Value store in shm
+     * Value store in shm.
      *
      * @var string
      */
     const VALUE_TO_STORE = "maintenance";
 
     /**
-     * Variable key
+     * Variable key.
      *
      * @var integer
      */
     const VARIABLE_KEY = 1;
 
     /**
-     * The key store in shm
+     * The key store in shm.
      *
      * @var string keyName
      */
@@ -33,14 +33,14 @@ class ShmDriver extends AbstractDriver
 
 
     /**
-     * Shared memory block ID
+     * Shared memory block ID.
      *
      * @var resource
      */
     protected $shmId;
 
     /**
-     * Constructor shmDriver
+     * Constructor shmDriver.
      *
      * @param Translator $translator Translator service
      * @param array      $options    Options driver
@@ -58,7 +58,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * Detach from shared memory
+     * Detach from shared memory.
      */
     public function __destruct()
     {

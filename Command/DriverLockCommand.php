@@ -5,13 +5,13 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Create a lock action
+ * Create a lock action.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -108,7 +108,7 @@ EOT
                     sprintf('<info>%s</info> [<comment>Default value in your configuration: %s</comment>]%s ', 'Set time', $driver->hasTtl() ? $driver->getTtl() : 'unlimited', ':'),
                     function($value) use ($default) {
                         if (!is_numeric($value) && null === $default) {
-                            return null;
+                            return;
                         } elseif (!is_numeric($value)) {
                             throw new \InvalidArgumentException('Time must be an integer');
                         }
@@ -131,7 +131,7 @@ EOT
     }
 
     /**
-     * Get driver
+     * Get driver.
      *
      * @return AbstractDriver
      */
@@ -145,8 +145,8 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return mixed
      */
     protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
@@ -163,12 +163,12 @@ EOT
      * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
      * but use the ConfirmationQuestion when available.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @param $question
      * @param $validator
-     * @param int $attempts
-     * @param null $default
+     * @param  int   $attempts
+     * @param  null  $default
      * @return mixed
      */
     protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null) {

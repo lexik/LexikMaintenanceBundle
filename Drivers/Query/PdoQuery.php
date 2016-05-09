@@ -5,7 +5,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Abstract class to handle PDO connection
+ * Abstract class to handle PDO connection.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -23,7 +23,7 @@ abstract class PdoQuery
     protected $options;
 
     /**
-     * Constructor PdoDriver
+     * Constructor PdoDriver.
      *
      * @param array $options Options driver
      */
@@ -33,14 +33,13 @@ abstract class PdoQuery
     }
 
     /**
-     * Execute create query
+     * Execute create query.
      *
-     * @return void
      */
     abstract function createTableQuery();
 
     /**
-     * Result of delete query
+     * Result of delete query.
      *
      * @param \PDO $db PDO instance
      *
@@ -49,7 +48,7 @@ abstract class PdoQuery
     abstract function deleteQuery($db);
 
     /**
-     * Result of select query
+     * Result of select query.
      *
      * @param \PDO $db PDO instance
      *
@@ -58,7 +57,7 @@ abstract class PdoQuery
     abstract function selectQuery($db);
 
     /**
-     * Result of insert query
+     * Result of insert query.
      *
      * @param integer $ttl ttl value
      * @param \PDO    $db  PDO instance
@@ -68,14 +67,14 @@ abstract class PdoQuery
     abstract function insertQuery($ttl, $db);
 
     /**
-     * Initialize pdo connection
+     * Initialize pdo connection.
      *
      * @return \PDO
      */
     abstract function initDb();
 
     /**
-     * Execute sql
+     * Execute sql.
      *
      * @param \PDO   $db    PDO instance
      * @param string $query Query
@@ -103,7 +102,7 @@ abstract class PdoQuery
     }
 
     /**
-     * PrepareStatement
+     * PrepareStatement.
      *
      * @param \PDO   $db    PDO instance
      * @param string $query Query
@@ -128,7 +127,7 @@ abstract class PdoQuery
     }
 
     /**
-     * Fetch All
+     * Fetch All.
      *
      * @param \PDO   $db    PDO instance
      * @param string $query Query

@@ -2,13 +2,13 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * Test driver factory
+ * Test driver factory.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

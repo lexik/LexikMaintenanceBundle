@@ -2,16 +2,13 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver;
-
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-
 /**
- * Test mem cache
+ * Test mem cache.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

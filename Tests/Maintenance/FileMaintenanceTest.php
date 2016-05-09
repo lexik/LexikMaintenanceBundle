@@ -3,13 +3,12 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
- * Test driver file
+ * Test driver file.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

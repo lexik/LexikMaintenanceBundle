@@ -5,7 +5,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * The server is currently unavailable (because it is overloaded or down for maintenance)
+ * The server is currently unavailable (because it is overloaded or down for maintenance).
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

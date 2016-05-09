@@ -7,9 +7,9 @@ class FileDriver extends AbstractDriver
     protected $filePath;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param array $options    Options driver
+     * @param array $options Options driver
      */
     public function __construct(array $options = array())
     {
@@ -57,7 +57,7 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * Test if time to life is expired
+     * Test if time to life is expired.
      *
      * @param integer $timeTtl The ttl value
      *

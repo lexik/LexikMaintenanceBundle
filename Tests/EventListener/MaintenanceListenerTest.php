@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Test for the maintenance listener
+ * Test for the maintenance listener.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -26,7 +26,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and restrictive with no arguments
+     * and restrictive with no arguments.
      */
     public function testBaseRequest()
     {
@@ -60,7 +60,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and path filters
+     * and path filters.
      */
     public function testPathFilter()
     {
@@ -91,7 +91,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and path filters
+     * and path filters.
      */
     public function testHostFilter()
     {
@@ -125,7 +125,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and ip filters
+     * and ip filters.
      */
     public function testIPFilter()
     {
@@ -205,7 +205,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and query filters
+     * and query filters.
      */
     public function testQueryFilter()
     {
@@ -247,7 +247,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and cookie filters
+     * and cookie filters.
      */
     public function testCookieFilter()
     {
@@ -289,7 +289,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Init a container
+     * Init a container.
      *
      * @return Container
      */
@@ -308,9 +308,9 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get a mock DatabaseDriver
+     * Get a mock DatabaseDriver.
      *
-     * @param boolean $lock
+     * @param  boolean                                  $lock
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getDatabaseDriver($lock = false)
@@ -331,7 +331,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get Translator
+     * Get Translator.
      *
      * @return \Symfony\Bundle\FrameworkBundle\Translation\Translator
      */

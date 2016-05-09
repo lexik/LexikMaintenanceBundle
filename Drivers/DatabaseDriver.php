@@ -7,7 +7,7 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
 use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 
 /**
- * Class driver for handle database
+ * Class driver for handle database.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -36,7 +36,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $pdoDriver;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Registry $doctrine The registry
      */
@@ -46,7 +46,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     }
 
     /**
-     * Set options from configuration
+     * Set options from configuration.
      *
      * @param array $options Options
      */
@@ -112,7 +112,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
         $data = $this->pdoDriver->selectQuery($db);
 
         if (!$data) {
-            return null;
+            return;
         }
 
         if (null !== $data[0]['ttl']) {

@@ -2,12 +2,12 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Create an unlock action
+ * Create an unlock action.
  *
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
@@ -47,8 +47,8 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return bool
      */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output)
@@ -84,8 +84,8 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return mixed
      */
     protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
