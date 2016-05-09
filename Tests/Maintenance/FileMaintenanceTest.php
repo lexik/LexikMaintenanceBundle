@@ -35,22 +35,6 @@ class FileDriverTest extends TestCase
         $this->container = null;
     }
 
-    public function testDecide()
-    {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock');
-
-        $fileM = new FileDriver($options);
-        $fileM->setTranslator($this->getTranslator());
-
-        $this->assertTrue($fileM->decide());
-
-        $options = array('file_path' => self::$tmpDir.'/clok');
-
-        $fileM2 = new FileDriver($options);
-        $fileM2->setTranslator($this->getTranslator());
-        $this->assertFalse($fileM2->decide());
-    }
-
     /**
      * @expectedException InvalidArgumentException
      */

@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -320,11 +319,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $db->expects($this->any())
-            ->method('isExists')
-            ->will($this->returnValue($lock));
-
-        $db->expects($this->any())
-            ->method('decide')
+            ->method('isLocked')
             ->will($this->returnValue($lock));
 
         return $db;
