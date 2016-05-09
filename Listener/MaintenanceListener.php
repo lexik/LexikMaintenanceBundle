@@ -143,6 +143,10 @@ class MaintenanceListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        if(!$event->isMasterRequest()){
+            return;
+        }
+
         $request = $event->getRequest();
 
         if (is_array($this->query)) {
