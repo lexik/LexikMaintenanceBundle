@@ -10,15 +10,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * Test driver file.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class FileDriverTest extends TestCase
+class FileMaintenanceTest extends TestCase
 {
-    static protected $tmpDir;
+    protected static $tmpDir;
     protected $container;
 
-    static public function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
@@ -68,7 +67,7 @@ class FileDriverTest extends TestCase
         $this->assertFileNotExists($options['file_path']);
     }
 
-    public function testIsLocked()
+    public function testisExist()
     {
         $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
 
@@ -96,7 +95,7 @@ class FileDriverTest extends TestCase
         $this->assertEquals($fileM->getMessageUnlock(false), 'lexik_maintenance.not_success_unlock');
     }
 
-    static public function tearDownAfterClass()
+    public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
     }
@@ -104,11 +103,11 @@ class FileDriverTest extends TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.debug' => false,
+            'kernel.bundles' => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         )));
 

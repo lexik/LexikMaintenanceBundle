@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 /**
  * Listener to decide if user can access to the site.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class MaintenanceListener
@@ -31,12 +30,12 @@ class MaintenanceListener
     protected $authorizedIps;
 
     /**
-     * @var null|String
+     * @var null|string
      */
     protected $path;
 
     /**
-     * @var null|String
+     * @var null|string
      */
     protected $host;
 
@@ -56,7 +55,7 @@ class MaintenanceListener
     protected $cookie;
 
     /**
-     * @var null|String
+     * @var null|string
      */
     protected $route;
 
@@ -66,12 +65,12 @@ class MaintenanceListener
     protected $attributes;
 
     /**
-     * @var Int|null
+     * @var int|null
      */
     protected $http_code;
 
     /**
-     * @var null|String
+     * @var null|string
      */
     protected $http_status;
 
@@ -95,15 +94,15 @@ class MaintenanceListener
      *  incoming request.
      *
      * @param DriverFactory $driverFactory The driver factory
-     * @param String        $path          A regex for the path
-     * @param String        $host          A regex for the host
+     * @param string        $path          A regex for the path
+     * @param string        $host          A regex for the host
      * @param array         $ips           The list of IP addresses
      * @param array         $query         Query arguments
      * @param array         $cookie        Cookies
-     * @param String        $route         Route name
+     * @param string        $route         Route name
      * @param array         $attributes    Attributes
-     * @param Int           $http_code     http status code for response
-     * @param String        $http_status   http status message for response
+     * @param int           $http_code     http status code for response
+     * @param string        $http_status   http status message for response
      * @param bool          $debug
      */
     public function __construct(
@@ -135,7 +134,6 @@ class MaintenanceListener
     /**
      * @param GetResponseEvent $event GetResponseEvent
      *
-     *
      * @throws ServiceUnavailableException
      */
     public function onKernelRequest(GetResponseEvent $event)
@@ -155,10 +153,10 @@ class MaintenanceListener
         /** @var AbstractDriver $driver */
         $driver = $this->driverFactory->getDriver();
 
-        if ($driver->isLocked()) {
+        if ($driver->isExist()) {
             if (is_array($this->query)) {
                 foreach ($this->query as $key => $pattern) {
-                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->get($key))) {
+                    if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
                         return;
                     }
                 }
@@ -166,7 +164,7 @@ class MaintenanceListener
 
             if (is_array($this->cookie)) {
                 foreach ($this->cookie as $key => $pattern) {
-                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->cookies->get($key))) {
+                    if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->cookies->get($key))) {
                         return;
                     }
                 }
@@ -174,17 +172,17 @@ class MaintenanceListener
 
             if (is_array($this->attributes)) {
                 foreach ($this->attributes as $key => $pattern) {
-                    if (!empty($pattern) && preg_match('{' . $pattern . '}', $request->attributes->get($key))) {
+                    if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
                         return;
                     }
                 }
             }
 
-            if (null !== $this->path && !empty($this->path) && preg_match('{' . $this->path . '}', rawurldecode($request->getPathInfo()))) {
+            if (null !== $this->path && !empty($this->path) && preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
                 return;
             }
 
-            if (null !== $this->host && !empty($this->host) && preg_match('{' . $this->host . '}i', $request->getHost())) {
+            if (null !== $this->host && !empty($this->host) && preg_match('{'.$this->host.'}i', $request->getHost())) {
                 return;
             }
 
@@ -192,7 +190,7 @@ class MaintenanceListener
                 return;
             }
 
-            if (null !== $this->route && preg_match('{' . $this->route . '}', $route) || (true === $this->debug && '_' === $route[0])) {
+            if (null !== $this->route && preg_match('{'.$this->route.'}', $route) || (true === $this->debug && '_' === $route[0])) {
                 return;
             }
 
@@ -200,6 +198,19 @@ class MaintenanceListener
         }
 
         return;
+    }
+
+    /**
+     * Rewrites the http code of the response.
+     *
+     * @param FilterResponseEvent $event FilterResponseEvent
+     */
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        if ($this->handleResponse && $this->http_code !== null) {
+            $response = $event->getResponse();
+            $response->setStatusCode($this->http_code, $this->http_status);
+        }
     }
 
     /**
@@ -217,9 +228,9 @@ class MaintenanceListener
         $valid = false;
         $i = 0;
 
-        while ($i<count($ips) && !$valid) {
+        while ($i < count($ips) && !$valid) {
             $valid = IpUtils::checkIp($requestedIp, $ips[$i]);
-            $i++;
+            ++$i;
         }
 
         return $valid;

@@ -7,7 +7,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 /**
  * Abstract class for drivers.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 abstract class AbstractDriver
@@ -35,28 +34,28 @@ abstract class AbstractDriver
     /**
      * Test if is locked.
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function isLocked();
+    abstract public function isExist();
 
     /**
      * Result of creation of lock.
      *
-     * @return boolean
+     * @return bool
      */
     abstract protected function createLock();
 
     /**
      * Result of create unlock.
      *
-     * @return boolean
+     * @return bool
      */
     abstract protected function createUnlock();
 
     /**
      * The feedback message.
      *
-     * @param boolean $resultTest The result of lock
+     * @param bool $resultTest The result of lock
      *
      * @return string
      */
@@ -65,7 +64,7 @@ abstract class AbstractDriver
     /**
      * The feedback message.
      *
-     * @param boolean $resultTest The result of unlock
+     * @param bool $resultTest The result of unlock
      *
      * @return string
      */
@@ -74,11 +73,11 @@ abstract class AbstractDriver
     /**
      * The response of lock.
      *
-     * @return boolean
+     * @return bool
      */
     public function lock()
     {
-        if (!$this->isLocked()) {
+        if (!$this->isExist()) {
             return $this->createLock();
         } else {
             return false;
@@ -88,11 +87,11 @@ abstract class AbstractDriver
     /**
      * The response of unlock.
      *
-     * @return boolean
+     * @return bool
      */
     public function unlock()
     {
-        if ($this->isLocked()) {
+        if ($this->isExist()) {
             return $this->createUnlock();
         } else {
             return false;

@@ -5,7 +5,6 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 /**
  * Class to handle a memcache driver.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
@@ -15,7 +14,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      *
      * @var string
      */
-    const VALUE_TO_STORE = "maintenance";
+    const VALUE_TO_STORE = 'maintenance';
 
     /**
      * The key store in memcache.
@@ -40,23 +39,23 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     {
         parent::__construct($options);
 
-        if ( ! isset($options['key_name'])) {
+        if (!isset($options['key_name'])) {
             throw new \InvalidArgumentException('$options[\'key_name\'] must be defined if Driver Memcache configuration is used');
         }
 
-        if ( ! isset($options['host'])) {
+        if (!isset($options['host'])) {
             throw new \InvalidArgumentException('$options[\'host\'] must be defined if Driver Memcache configuration is used');
         }
 
-        if ( ! isset($options['port'])) {
+        if (!isset($options['port'])) {
             throw new \InvalidArgumentException('$options[\'port\'] must be defined if Driver Memcache configuration is used');
-        } elseif (! is_int($options['port'])) {
+        } elseif (!is_int($options['port'])) {
             throw new \InvalidArgumentException('$options[\'port\'] must be an integer if Driver Memcache configuration is used');
         }
 
         if (null !== $options) {
             $this->keyName = $options['key_name'];
-            $this->memcacheInstance = new \Memcache;
+            $this->memcacheInstance = new \Memcache();
             $this->memcacheInstance->connect($options['host'], $options['port']);
         }
 
@@ -82,7 +81,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function isLocked()
+    public function isExist()
     {
         if (false !== $this->memcacheInstance->get($this->keyName)) {
             return true;

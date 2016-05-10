@@ -17,7 +17,8 @@
         </service>
 
         <service id="lexik_maintenance.listener" class="%lexik_maintenance.listener.class%">
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
+            <tag name="kernel.event_listener" event="kernel.request"  method="onKernelRequest" />
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
             <argument type="service" id="lexik_maintenance.driver.factory" />
             <argument>%lexik_maintenance.authorized.path%</argument>
             <argument>%lexik_maintenance.authorized.host%</argument>

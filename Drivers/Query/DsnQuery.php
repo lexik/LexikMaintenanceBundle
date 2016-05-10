@@ -2,12 +2,9 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 
-use Doctrine\ORM\EntityManager;
-
 /**
  * Class for handle database with a dsn connection.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DsnQuery extends PdoQuery
@@ -18,7 +15,6 @@ class DsnQuery extends PdoQuery
     public function initDb()
     {
         if (null === $this->db) {
-
             if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {
                 throw new \RuntimeException('You need to enable PDO_Mysql extension for the profiler to run properly.');
             }

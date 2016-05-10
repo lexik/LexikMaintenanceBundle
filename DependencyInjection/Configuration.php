@@ -10,13 +10,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -70,10 +69,10 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->integerNode('code')
-                            ->defaultValue( 503 )
+                            ->defaultValue(503)
                         ->end()
                         ->scalarNode('status')
-                            ->defaultValue( "Service Temporarily Unavailable")
+                            ->defaultValue('Service Temporarily Unavailable')
                         ->end()
                     ->end()
                 ->end()

@@ -9,7 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Create an unlock action.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverUnlockCommand extends ContainerAwareCommand
@@ -47,8 +46,9 @@ EOT
     }
 
     /**
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return bool
      */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output)
@@ -84,14 +84,16 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')

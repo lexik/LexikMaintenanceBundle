@@ -4,7 +4,6 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
-
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Create a lock action.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverLockCommand extends ContainerAwareCommand
@@ -56,6 +54,7 @@ EOT
         if ($input->isInteractive()) {
             if (!$this->askConfirmation('WARNING! Are you sure you wish to continue? (y/n)', $input, $output)) {
                 $output->writeln('<error>Maintenance cancelled!</error>');
+
                 return;
             }
         } elseif (null !== $input->getArgument('ttl')) {
@@ -106,12 +105,13 @@ EOT
                     $input,
                     $output,
                     sprintf('<info>%s</info> [<comment>Default value in your configuration: %s</comment>]%s ', 'Set time', $driver->hasTtl() ? $driver->getTtl() : 'unlimited', ':'),
-                    function($value) use ($default) {
+                    function ($value) use ($default) {
                         if (!is_numeric($value) && null === $default) {
                             return;
                         } elseif (!is_numeric($value)) {
                             throw new \InvalidArgumentException('Time must be an integer');
                         }
+
                         return $value;
                     },
                     1,
@@ -145,14 +145,16 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')
@@ -167,11 +169,13 @@ EOT
      * @param OutputInterface $output
      * @param $question
      * @param $validator
-     * @param  int   $attempts
-     * @param  null  $default
+     * @param int  $attempts
+     * @param null $default
+     *
      * @return mixed
      */
-    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null) {
+    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
                 ->askAndValidate($output, $question, $validator, $attempts, $default);

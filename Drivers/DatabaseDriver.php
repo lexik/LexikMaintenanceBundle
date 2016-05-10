@@ -9,7 +9,6 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 /**
  * Class driver for handle database.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
@@ -30,7 +29,6 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $db;
 
     /**
-     *
      * @var PdoDriver
      */
     protected $pdoDriver;
@@ -106,7 +104,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function isLocked()
+    public function isExist()
     {
         $db = $this->pdoDriver->initDb();
         $data = $this->pdoDriver->selectQuery($db);
@@ -138,7 +136,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMessageUnlock($resultTest)
     {

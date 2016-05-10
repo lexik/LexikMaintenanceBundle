@@ -13,13 +13,11 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Test for the maintenance listener.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 {
-    protected
-        $container,
+    protected $container,
         $factory;
 
     /**
@@ -37,7 +35,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(false),$this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(false), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
@@ -200,7 +198,6 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         return $data;
     }
 
-
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
@@ -280,11 +277,10 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path, host, ip, query and matching cookie');
     }
 
-
     public function tearDown()
     {
         $this->container = null;
-        $this->factory   = null;
+        $this->factory = null;
     }
 
     /**
@@ -295,11 +291,11 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.debug' => false,
+            'kernel.bundles' => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         )));
 
@@ -309,7 +305,8 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Get a mock DatabaseDriver.
      *
-     * @param  boolean                                  $lock
+     * @param bool $lock
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getDatabaseDriver($lock = false)
@@ -319,7 +316,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $db->expects($this->any())
-            ->method('isLocked')
+            ->method('isExist')
             ->will($this->returnValue($lock));
 
         return $db;

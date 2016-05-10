@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManager;
 /**
  * Default Class for handle database with a doctrine connection.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DefaultQuery extends PdoQuery
@@ -17,7 +16,7 @@ class DefaultQuery extends PdoQuery
      */
     protected $em;
 
-    const NAME_TABLE   = 'lexik_maintenance';
+    const NAME_TABLE = 'lexik_maintenance';
 
     /**
      * @param EntityManager $em Entity Manager

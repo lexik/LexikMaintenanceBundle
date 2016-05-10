@@ -5,7 +5,6 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 /**
  * Class to handle a shared memory driver.
  *
- * @package LexikMaintenanceBundle
  * @author  Audrius Karabanovas <audrius@karabanovas.net>
  */
 class ShmDriver extends AbstractDriver
@@ -15,12 +14,12 @@ class ShmDriver extends AbstractDriver
      *
      * @var string
      */
-    const VALUE_TO_STORE = "maintenance";
+    const VALUE_TO_STORE = 'maintenance';
 
     /**
      * Variable key.
      *
-     * @var integer
+     * @var int
      */
     const VARIABLE_KEY = 1;
 
@@ -30,7 +29,6 @@ class ShmDriver extends AbstractDriver
      * @var string keyName
      */
     protected $keyName;
-
 
     /**
      * Shared memory block ID.
@@ -94,14 +92,15 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    public function isLocked()
+    public function isExist()
     {
         if ($this->shmId) {
-            if (!shm_has_var($this->shmId, self::VARIABLE_KEY) ) {
+            if (!shm_has_var($this->shmId, self::VARIABLE_KEY)) {
                 return false;
             }
             $data = shm_get_var($this->shmId, self::VARIABLE_KEY);
-            return ($data == self::VALUE_TO_STORE);
+
+            return $data == self::VALUE_TO_STORE;
         }
 
         return false;

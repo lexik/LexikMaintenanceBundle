@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * Test driver factory.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverFactoryTest extends \PHPUnit_Framework_TestCase
@@ -22,7 +21,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $driverOptions = array(
             'class' => '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver',
-            'options' => array('file_path' => sys_get_temp_dir().'/lock'));
+            'options' => array('file_path' => sys_get_temp_dir().'/lock'), );
 
         $this->container = $this->initContainer();
 
@@ -79,11 +78,11 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     protected function initContainer()
     {
         $container = new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.debug' => false,
+            'kernel.bundles' => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         )));
 

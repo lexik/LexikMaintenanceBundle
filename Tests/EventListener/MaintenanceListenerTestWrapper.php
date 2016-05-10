@@ -15,8 +15,7 @@ class MaintenanceListenerTestWrapper extends MaintenanceListener
     {
         try {
             parent::onKernelRequest($event);
-        }
-        catch (ServiceUnavailableException $e) {
+        } catch (ServiceUnavailableException $e) {
             return false;
         }
 

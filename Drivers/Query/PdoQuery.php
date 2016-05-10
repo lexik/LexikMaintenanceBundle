@@ -2,12 +2,9 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 
-use Doctrine\ORM\EntityManager;
-
 /**
  * Abstract class to handle PDO connection.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 abstract class PdoQuery
@@ -34,18 +31,17 @@ abstract class PdoQuery
 
     /**
      * Execute create query.
-     *
      */
-    abstract function createTableQuery();
+    abstract public function createTableQuery();
 
     /**
      * Result of delete query.
      *
      * @param \PDO $db PDO instance
      *
-     * @return boolean
+     * @return bool
      */
-    abstract function deleteQuery($db);
+    abstract public function deleteQuery($db);
 
     /**
      * Result of select query.
@@ -54,24 +50,24 @@ abstract class PdoQuery
      *
      * @return array
      */
-    abstract function selectQuery($db);
+    abstract public function selectQuery($db);
 
     /**
      * Result of insert query.
      *
-     * @param integer $ttl ttl value
-     * @param \PDO    $db  PDO instance
+     * @param int  $ttl ttl value
+     * @param \PDO $db  PDO instance
      *
-     * @return boolean
+     * @return bool
      */
-    abstract function insertQuery($ttl, $db);
+    abstract public function insertQuery($ttl, $db);
 
     /**
      * Initialize pdo connection.
      *
      * @return \PDO
      */
-    abstract function initDb();
+    abstract public function initDb();
 
     /**
      * Execute sql.
@@ -80,7 +76,7 @@ abstract class PdoQuery
      * @param string $query Query
      * @param array  $args  Arguments
      *
-     * @return boolean
+     * @return bool
      *
      * @throws \RuntimeException
      */
@@ -153,4 +149,3 @@ abstract class PdoQuery
         return $return;
     }
 }
-
