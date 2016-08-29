@@ -18,14 +18,15 @@ class DsnQuery extends PdoQuery
     public function initDb()
     {
         if (null === $this->db) {
-
             if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {
                 throw new \RuntimeException('You need to enable PDO_Mysql extension for the profiler to run properly.');
             }
 
             $db = new \PDO($this->options['dsn'], $this->options['user'], $this->options['password']);
             $this->db = $db;
-            $this->createTableQuery();
+            if (!isset($this->options['table_created']) || !$this->options['table_created']) {
+                $this->createTableQuery();
+            }
         }
 
         return $this->db;

@@ -58,9 +58,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
             $this->pdoDriver = new DsnQuery($this->options);
         } else {
             if (isset($this->options['connection'])) {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager($this->options['connection']));
+                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager($this->options['connection']), $this->options);
             } else {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager());
+                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager(), $this->options);
             }
         }
     }
