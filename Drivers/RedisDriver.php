@@ -2,8 +2,6 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
-use Doctrine\Common\Cache\PredisCache;
-
 /**
  * Class RedisDriver
  *
