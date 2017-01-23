@@ -5,6 +5,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Listener;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -24,6 +26,13 @@ class MaintenanceListener
      * @var \Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory
      */
     protected $driverFactory;
+    
+    /**
+     * Service container interface
+     *
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $containerInterface;
 
     /**
      * Authorized data
@@ -97,6 +106,7 @@ class MaintenanceListener
      *  incoming request.
      *
      * @param DriverFactory $driverFactory The driver factory
+     * @param ContainerInterface $containerInterface The container interface
      * @param String $path A regex for the path
      * @param String $host A regex for the host
      * @param array $ips The list of IP addresses
@@ -110,6 +120,7 @@ class MaintenanceListener
      */
     public function __construct(
         DriverFactory $driverFactory,
+        ContainerInterface $containerInterface,
         $path = null,
         $host = null,
         $ips = null,
@@ -122,6 +133,7 @@ class MaintenanceListener
         $debug = false
     ) {
         $this->driverFactory = $driverFactory;
+        $this->containerInterface = $containerInterface;
         $this->path = $path;
         $this->host = $host;
         $this->ips = $ips;
@@ -195,7 +207,10 @@ class MaintenanceListener
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this->handleResponse = true;
-            throw new ServiceUnavailableException();
+            $engine = $this->containerInterface->get('templating');
+            $content = $engine->render('::maintenance.html.twig');
+            $event->setResponse(new Response($content,503));
+            $event->stopPropagation();
         }
 
         return;
