@@ -46,8 +46,10 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
                 $options['ttl'] = intval($options['ttl']);
             }
 
-            $this->redisInstance = new \Predis\Client($options['connection_parameters']);
             $this->keyName = $options['key_name'];
+
+            $this->redisInstance = new \Predis\Client($options['connection_parameters']);
+            $this->redisInstance->connect();
         }
 
         $this->options = $options;
