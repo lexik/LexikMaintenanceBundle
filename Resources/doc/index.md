@@ -97,9 +97,8 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
 
             # Redis driver
             class: Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver
-            options:                                                                   # need to define a key_name and connection_parameters
-                - key_name: 'maintenance'
-                - connection_parameters: 'tcp://127.0.0.1:6379'                        # any valid redis connection uri, see https://github.com/nrk/predis#connecting-to-redis
+            # Need to define a key_name and connection_parameters. Any valid redis connection uri, see https://github.com/nrk/predis#connecting-to-redis
+            options: { key_name: 'maintenance', connection_parameters: 'tcp://127.0.0.1:6379' }                                                                 
 
             # Database driver:
             class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
