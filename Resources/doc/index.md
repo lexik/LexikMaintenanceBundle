@@ -14,7 +14,7 @@ just add the following lines to it:
 
 You must register in your autoloader:
 
-
+```php
     <?php
 
     // app/autoload.php
@@ -22,18 +22,20 @@ You must register in your autoloader:
         'Lexik'            => __DIR__.'/../vendor/bundles',
         // ...
     ));
-
+```
 
 ## Install using composer.json
 
 If you are using composer to manage your project, just add the following
 line to your composer.json file
 
+```json
     {
         "require": {
             "lexik/maintenance-bundle": "dev-master"
         }
     }
+```
 
 Then update the vendor libraries:
 
@@ -48,9 +50,10 @@ composer.phar update lexik/maintenance-bundle # to only update the bundle
 
 You must register the bundle in your kernel:
 
+```php
     <?php
 
-    // app/AppKernel.php
+    // app/AppKernel.phpTdolibarr 
     public function registerBundles()
     {
         $bundles = array(
@@ -59,6 +62,7 @@ You must register the bundle in your kernel:
         );
         // ...
     }
+```
 
 -----------------------
 
@@ -71,6 +75,7 @@ Here the complete configuration with the `example` of each pair of class / optio
 
 The ttl (time to life) option is optional everywhere, it is used to indicate the duration in `second` of the maintenance.
 
+```yaml
     #app/config.yml
     lexik_maintenance:
         authorized:
@@ -108,7 +113,7 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
         response:
             code: 503
             status: "Service Temporarily Unavailable"
-
+```
 
 ### Commands
 
@@ -165,6 +170,7 @@ You can use the ``lexik_maintenance.driver.factory`` service anyway in your app 
 For example, you can build a backend module to activate maintenance mode.
 In your controller:
 
+```php
     $driver = $this->get('lexik_maintenance.driver.factory')->getDriver();
     $message = "";
     if ($action === 'lock') {
@@ -176,6 +182,6 @@ In your controller:
     $this->get('session')->setFlash('maintenance', $message);
 
     return new RedirectResponse($this->generateUrl('_demo'));
-
+```
 
 **Warning**: Make sure you have allowed IP addresses if you run maintenance from the backend, otherwise you will find yourself blocked on page 503.
