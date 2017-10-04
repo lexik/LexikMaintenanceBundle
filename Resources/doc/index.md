@@ -1,46 +1,10 @@
 Installation
 ============
 
-## Standard Edition Style
-
-If you are using the `deps` file to manage your project's dependencies,
-just add the following lines to it:
-
-    [LexikMaintenanceBundle]
-        git=git://github.com/lexik/LexikMaintenanceBundle.git
-        target=bundles/Lexik/Bundle/MaintenanceBundle
-
-### Add the namespace in the autoloader
-
-You must register in your autoloader:
-
-
-    <?php
-
-    // app/autoload.php
-    $loader->registerNamespaces(array(
-        'Lexik'            => __DIR__.'/../vendor/bundles',
-        // ...
-    ));
-
-
-## Install using composer.json
-
-If you are using composer to manage your project, just add the following
-line to your composer.json file
-
-    {
-        "require": {
-            "lexik/maintenance-bundle": "dev-master"
-        }
-    }
-
-Then update the vendor libraries:
+## Install it via composer
 
 ```shell
-composer.phar update
-# OR
-composer.phar update lexik/maintenance-bundle # to only update the bundle
+php composer.phar require lexik/maintenance-bundle
 ```
 
 
