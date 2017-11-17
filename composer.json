@@ -21,10 +21,13 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "~2.7|~3.0"
+        "symfony/framework-bundle": "~2.7|~3.0",
+        "symfony/translation": "~2.7|~3.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0"
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "phpunit/phpunit": "~4.8"
     },
     "autoload":     {
         "psr-4": { "Lexik\\Bundle\\MaintenanceBundle\\": "" }
