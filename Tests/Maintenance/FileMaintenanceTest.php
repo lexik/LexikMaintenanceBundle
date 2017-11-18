@@ -7,6 +7,7 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Test driver file
@@ -14,12 +15,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class FileDriverTest extends TestCase
+class FileMaintenanceTest extends TestCase
 {
     static protected $tmpDir;
     protected $container;
 
-    static public function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
@@ -134,11 +135,18 @@ class FileDriverTest extends TestCase
 
     public function getTranslator()
     {
-        $translator = new Translator(
-            $this->container,
-            $this->getMock('Symfony\Component\Translation\MessageSelector'),
-            'en'
-        );
+        if (Kernel::VERSION_ID < 30300) {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector')
+            );
+        } else {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector'),
+                'en'
+            );
+        }
 
         return $translator;
     }
