@@ -21,6 +21,7 @@ matrix:
   include:
     - php: 5.3
       env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
+      dist: precise
     - php: 5.6
       env: SYMFONY_VERSION='2.8.*'
     - php: 7.1
@@ -35,4 +36,4 @@ before_install:
 
 install: composer update $COMPOSER_FLAGS
 
-script: phpunit
+script: ./vendor/bin/phpunit
