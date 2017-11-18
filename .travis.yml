@@ -18,8 +18,6 @@ matrix:
   fast_finish: true
   include:
     - php: 5.3
-      dist: precise
-    - php: 5.3
       env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
       dist: precise
     - php: 5.6
