@@ -103,7 +103,8 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $translator = new Translator(
             $this->container,
-            $this->getMock('Symfony\Component\Translation\MessageSelector')
+            $this->getMock('Symfony\Component\Translation\MessageSelector'),
+            'en'
         );
 
         return $translator;
