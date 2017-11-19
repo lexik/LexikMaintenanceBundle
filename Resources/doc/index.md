@@ -58,6 +58,10 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
              # MemCache driver
             class: Lexik\Bundle\MaintenanceBundle\Drivers\MemCacheDriver               # class for MemCache driver
             options: {key_name: 'maintenance', host: 127.0.0.1, port: 11211}           # need to define a key_name, the host and port
+            
+             # Redis driver
+            class: Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver                  # class for Redis driver
+            options: {key_name: 'maintenance', host: 127.0.0.1, port: 6379}            # need to define a key_name, the host and port
 
             # Database driver:
             class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
