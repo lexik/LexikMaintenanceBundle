@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Test driver factory
@@ -101,10 +102,18 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function getTranslator()
     {
-        $translator = new Translator(
-            $this->container,
-            $this->getMock('Symfony\Component\Translation\MessageSelector')
-        );
+        if (Kernel::VERSION_ID < 30300) {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector')
+            );
+        } else {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector'),
+                'en'
+            );
+        }
 
         return $translator;
     }

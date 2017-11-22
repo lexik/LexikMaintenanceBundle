@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Test for the maintenance listener
@@ -337,10 +338,18 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function getTranslator()
     {
-        $translator = new Translator(
-            $this->container,
-            $this->getMock('Symfony\Component\Translation\MessageSelector')
-        );
+        if (Kernel::VERSION_ID < 30300) {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector')
+            );
+        } else {
+            $translator = new Translator(
+                $this->container,
+                $this->getMock('Symfony\Component\Translation\MessageSelector'),
+                'en'
+            );
+        }
 
         return $translator;
     }
