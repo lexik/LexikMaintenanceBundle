@@ -3,11 +3,9 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Translation\MessageSelector;
 
 /**
@@ -141,19 +139,6 @@ class FileMaintenanceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        if (Kernel::VERSION_ID < 30300) {
-            $translator = new Translator(
-                $this->container,
-                $messageSelector
-            );
-        } else {
-            $translator = new Translator(
-                $this->container,
-                $messageSelector,
-                'en'
-            );
-        }
-
-        return $translator;
+        return TestHelper::getTranslator($this->container, $messageSelector);
     }
 }
