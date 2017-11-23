@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Translation\MessageSelector;
 
 /**
  * Test driver file
@@ -135,15 +136,20 @@ class FileMaintenanceTest extends TestCase
 
     public function getTranslator()
     {
+        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
+        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         if (Kernel::VERSION_ID < 30300) {
             $translator = new Translator(
                 $this->container,
-                $this->getMock('Symfony\Component\Translation\MessageSelector')
+                $messageSelector
             );
         } else {
             $translator = new Translator(
                 $this->container,
-                $this->getMock('Symfony\Component\Translation\MessageSelector'),
+                $messageSelector,
                 'en'
             );
         }
