@@ -2,11 +2,11 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Translation\MessageSelector;
 
 /**
  * Test driver factory
@@ -102,19 +102,11 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function getTranslator()
     {
-        if (Kernel::VERSION_ID < 30300) {
-            $translator = new Translator(
-                $this->container,
-                $this->getMock('Symfony\Component\Translation\MessageSelector')
-            );
-        } else {
-            $translator = new Translator(
-                $this->container,
-                $this->getMock('Symfony\Component\Translation\MessageSelector'),
-                'en'
-            );
-        }
+        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
+        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        return $translator;
+        return TestHelper::getTranslator($this->container, $messageSelector);
     }
 }
