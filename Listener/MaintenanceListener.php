@@ -181,7 +181,7 @@ class MaintenanceListener
             return;
         }
 
-        if (count($this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
+        if (count((array) $this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
             return;
         }
 
