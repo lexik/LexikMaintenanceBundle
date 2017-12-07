@@ -16,7 +16,7 @@ class FileDriver extends AbstractDriver
         parent::__construct($options);
 
         if ( ! isset($options['file_path'])) {
-            throw new \InvalidArgumentException('$options[\'file_path\'] cannot be defined if Driver File configuration is used');
+            throw new \InvalidArgumentException('$options[\'file_path\'] must be defined if Driver File configuration is used.');
         }
         if (null !== $options) {
             $this->filePath = $options['file_path'];
