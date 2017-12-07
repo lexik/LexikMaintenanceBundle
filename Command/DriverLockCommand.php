@@ -28,10 +28,10 @@ class DriverLockCommand extends ContainerAwareCommand
         $this
             ->setName('lexik:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
-            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
+            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to live from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
             ->setHelp(<<<EOT
 
-    You can optionally set a time to life of the maintenance
+    You can optionally set a time to live of the maintenance
 
    <info>%command.full_name% 3600</info>
 

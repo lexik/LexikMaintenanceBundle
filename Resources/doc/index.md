@@ -33,7 +33,7 @@ you have several options for each driver.
 
 Here the complete configuration with the `example` of each pair of class / options.
 
-The ttl (time to life) option is optional everywhere, it is used to indicate the duration in `second` of the maintenance.
+The ttl (time to live) option is optional everywhere, it is used to indicate the duration in `second` of the maintenance.
 
     #app/config.yml
     lexik_maintenance:
@@ -80,7 +80,7 @@ There are two commands:
 
     lexik:maintenance:lock [--set-ttl]
 
-This command will enable the maintenance according with your configuration. You can pass the time to life of the maintenance in parameter, ``this doesn't works with file driver``.
+This command will enable the maintenance according with your configuration. You can pass the time to live of the maintenance in parameter, ``this doesn't works with file driver``.
 
     lexik:maintenance:unlock
 

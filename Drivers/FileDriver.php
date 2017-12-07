@@ -57,7 +57,7 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * Test if time to life is expired
+     * Test if time to live is expired
      *
      * @param integer $timeTtl The ttl value
      *
