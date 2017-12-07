@@ -12,21 +12,14 @@ class TestHelper
 {
     public static function getTranslator(ContainerBuilder $container, MessageSelector $messageSelector)
     {
-        if (Kernel::VERSION_ID < 30300) {
+        if (Kernel::VERSION_ID < 30400) {
             // symfony 2
             $translator = new Translator(
                 $container,
                 $messageSelector
             );
-        } elseif (Kernel::VERSION_ID >= 30300 && Kernel::VERSION_ID < 40000) {
-            // symfony 3
-            $translator = new Translator(
-                $container,
-                $messageSelector,
-                'en'
-            );
         } else {
-            // symfony 4
+            // symfony 3, 4
             $translator = new Translator(
                 $container,
                 new MessageFormatter($messageSelector),
