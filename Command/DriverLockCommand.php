@@ -2,9 +2,12 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
+use Doctrine\DBAL\Driver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
+use Lexik\Bundle\MaintenanceBundle\Drivers\DriverStartdateInterface;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 
+use Nette\Utils\DateTime;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 class DriverLockCommand extends ContainerAwareCommand
 {
     protected $ttl;
+    protected $startdate;
 
     /**
      * {@inheritdoc}
@@ -29,19 +33,18 @@ class DriverLockCommand extends ContainerAwareCommand
             ->setName('lexik:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
             ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to live from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
+            ->addOption('startdate','s', InputArgument::OPTIONAL, 'Specify the start date of maintenance (does, so far, only work with database driver without dsn). Format: \'yyyy-m-d h:m\'.', null)
+            ->addOption('delay', 'd', InputArgument::OPTIONAL, 'Specify the time to wait until start of maintenance (does, so far, only work with database driver without dsn). Time in seconds.', null)
             ->setHelp(<<<EOT
 
-    You can optionally set a time to live of the maintenance
+    You can optionally set a time to live of the maintenance: <info>%command.full_name% 3600</info>
+   
+    You can set a start date or delay the start (from now) of the lock.    
+    Set the start date with: <info>%command.full_name% -s "24.12.2017 18:00"</info>
+    Or delay the lock with: <info>%command.full_name% -d 3600</info>
 
-   <info>%command.full_name% 3600</info>
-
-    You can execute the lock without a warning message which you need to interact with:
-
-    <info>%command.full_name% --no-interaction</info>
-
-    Or
-
-    <info>%command.full_name% 3600 -n</info>
+    You can execute the lock without a warning message which you need to interact with: <info>%command.full_name% --no-interaction</info>
+    Or <info>%command.full_name% 3600 -n</info>
 EOT
             );
     }
@@ -52,6 +55,7 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $driver = $this->getDriver();
+        $message = '';
 
         if ($input->isInteractive()) {
             if (!$this->askConfirmation('WARNING! Are you sure you wish to continue? (y/n)', $input, $output)) {
@@ -64,12 +68,30 @@ EOT
             $this->ttl = $driver->getTtl();
         }
 
+        if (!$input->isInteractive() && $driver instanceof DriverStartdateInterface) {
+            $this->startdate = $this->interactStartDate($input);
+        }
+
         // set ttl from command line if given and driver supports it
         if ($driver instanceof DriverTtlInterface) {
             $driver->setTtl($this->ttl);
         }
 
-        $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
+        if (!is_null($this->startdate)) {
+            // set start date from command line if given and driver supports it
+            if ($driver instanceof DriverStartdateInterface) {
+                $driver->setStartDate($this->startdate);
+                $message = $driver->getMessagePrepare($driver->prepareLock());
+            } else {
+                // this message is already generated within interact()
+                // $message = sprintf('<fg=red>Start date / delay doesn\'t work with %s driver</>', get_class($driver));
+            }
+        } else {
+            $message = $driver->getMessageLock($driver->lock());
+        }
+         
+        
+        $output->writeln('<info>'.$message.'</info>');
     }
 
     /**
@@ -128,16 +150,21 @@ EOT
                 '',
             ));
         }
-    }
 
-    /**
-     * Get driver
-     *
-     * @return AbstractDriver
-     */
-    private function getDriver()
-    {
-        return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        if ($driver instanceof DriverStartdateInterface) {
+
+            if (null != $input->getOption('startdate') && null != $input->getOption('delay')) {
+                throw new \InvalidArgumentException('Please specify either start date or delay.');
+            }
+            $this->startdate = $this->interactStartDate($input);
+            
+        } else {
+            $output->writeln(array(
+                '',
+                sprintf('<fg=red>Start date/delay doesn\'t work with %s driver</>', get_class($driver)),
+                '',
+            ));
+        }
     }
 
     /**
@@ -183,5 +210,47 @@ EOT
 
         return $this->getHelper('question')
             ->ask($input, $output, $question);
+    }
+
+    /**
+     * Get driver
+     *
+     * @return AbstractDriver
+     */
+    private function getDriver()
+    {
+        return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+    }
+
+    /**
+     * Handle input options for start date / delay
+     * 
+     * @return DateTime | null
+     */
+    private function interactStartDate(InputInterface $input)
+    {
+        $startDate = null;
+        
+        if (null != $input->getOption('startdate')) {
+            $value = $input->getOption('startdate');
+            $startDate = \DateTime::createFromFormat('Y-m-d H:i', $value);
+
+            if (false === $startDate) {
+                throw new \InvalidArgumentException('Start date must be given in format: \'yyyy-m-d h:m\'.');
+            }
+
+        } elseif (null != $input->getOption('delay')) {
+            $value = $input->getOption('delay');
+
+            if (!is_numeric($value)) {
+                throw new \InvalidArgumentException('Delay must be an integer.');
+            }
+
+            $startDate = new \DateTime();
+            $intervalSpec = 'PT' . $value . 'S';
+            $startDate->add(new \DateInterval($intervalSpec)); // add delay to current date time
+        }
+        
+        return $startDate;
     }
 }

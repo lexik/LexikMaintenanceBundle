@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Listener;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 
@@ -192,6 +193,7 @@ class MaintenanceListener
 
         // Get driver class defined in your configuration
         $driver = $this->driverFactory->getDriver();
+        /* @var $driver AbstractDriver */
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this->handleResponse = true;

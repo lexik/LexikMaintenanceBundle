@@ -10,14 +10,15 @@ use Doctrine\ORM\EntityManager;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DefaultQuery extends PdoQuery
+class DefaultQuery extends PdoQuery implements QueryStartdateInterface
 {
     /**
      * @var EntityManager
      */
     protected $em;
 
-    const NAME_TABLE   = 'lexik_maintenance';
+    const NAME_TABLE_LOCK   = 'lexik_maintenance';
+    const NAME_TABLE_STARTDATE   = 'lexik_startdate';
 
     /**
      * @param EntityManager $em Entity Manager
@@ -49,7 +50,10 @@ class DefaultQuery extends PdoQuery
         $type = $this->em->getConnection()->getDatabasePlatform()->getName() != 'mysql' ? 'timestamp' : 'datetime';
 
         $this->db->exec(
-            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE, $type)
+            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE_LOCK, $type)
+        );
+        $this->db->exec(
+            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', self::NAME_TABLE_STARTDATE, $type, $type)
         );
     }
 
@@ -58,7 +62,7 @@ class DefaultQuery extends PdoQuery
      */
     public function deleteQuery($db)
     {
-        return $this->exec($db, sprintf('DELETE FROM %s', self::NAME_TABLE));
+        return $this->exec($db, sprintf('DELETE FROM %s', self::NAME_TABLE_LOCK));
     }
 
     /**
@@ -66,7 +70,7 @@ class DefaultQuery extends PdoQuery
      */
     public function selectQuery($db)
     {
-        return $this->fetch($db, sprintf('SELECT ttl FROM %s', self::NAME_TABLE));
+        return $this->fetch($db, sprintf('SELECT ttl FROM %s', self::NAME_TABLE_LOCK));
     }
 
     /**
@@ -76,8 +80,36 @@ class DefaultQuery extends PdoQuery
     {
         return $this->exec(
             $db, sprintf('INSERT INTO %s (ttl) VALUES (:ttl)',
-            self::NAME_TABLE),
+            self::NAME_TABLE_LOCK),
             array(':ttl' => $ttl)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteStartdateQuery($db)
+    {
+        return $this->exec($db, sprintf('DELETE FROM %s', self::NAME_TABLE_STARTDATE));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function selectStartdateQuery($db)
+    {
+        return $this->fetch($db, sprintf('SELECT ttl, startdate FROM %s', self::NAME_TABLE_STARTDATE));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function insertStartdateQuery($ttl, $startDate, $db)
+    {
+        return $this->exec(
+            $db, sprintf('INSERT INTO %s (ttl, startdate) VALUES (:ttl, :startdate)',
+            self::NAME_TABLE_STARTDATE),
+            array(':ttl' => $ttl, ':startdate' => $startDate)
         );
     }
 }

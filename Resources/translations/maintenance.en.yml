@@ -5,3 +5,5 @@ lexik_maintenance.success_lock_database: Server is under maintenance with driver
 lexik_maintenance.success_lock_file: Server is under maintenance with driver file.
 lexik_maintenance.success_lock_memc: Server is under maintenance with memcache.
 lexik_maintenance.success_lock_shm: Server is under maintenance with shm.
+lexik_maintenance.success_prepare_database: Server is prepared for maintenance with driver database.
+lexik_maintenance.not_success_prepare: Impossible to prepare maintenance.

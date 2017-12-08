@@ -5,6 +5,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
 use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
+use Lexik\Bundle\MaintenanceBundle\Drivers\Query\PdoQuery;
+use Lexik\Bundle\MaintenanceBundle\Drivers\Query\QueryStartdateInterface;
 
 /**
  * Class driver for handle database
@@ -12,7 +14,7 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
+class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, DriverStartdateInterface
 {
     /**
      * @var Registry
@@ -31,7 +33,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 
     /**
      *
-     * @var PdoDriver
+     * @var PdoQuery
      */
     protected $pdoDriver;
 
@@ -106,6 +108,40 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
+    public function prepareLock()
+    {
+        $db = $this->pdoDriver->initDb();
+        $status = false;
+        
+        if ($this->pdoDriver instanceof QueryStartdateInterface)
+        {
+            // todo: handle situation where there is already a lock or a prepared lock
+            /* @var $this->pdoDriver QueryStartdateInterface */
+            $startDate = null;
+            if (isset($this->options['startdate']) && $this->options['startdate'] instanceof \DateTime) {
+                $startDate = $this->options['startdate']->format('Y-m-d H:i:s');
+                $ttl = null;
+                if (isset($this->options['ttl']) && $this->options['ttl'] !== 0) {
+                    $ttl = $this->options['ttl'];
+                    $ttlDate = $this->options['startdate'];
+                    /* @var $ttlDate \DateTime */
+                    $ttlDate->modify(sprintf('+%s seconds', $ttl));
+                    $ttl = $ttlDate->format('Y-m-d H:i:s');
+                }
+                try {
+                    $status = $this->pdoDriver->insertStartdateQuery($ttl, $startDate, $db);
+                } catch (\Exception $e) {
+                    $status = false;
+                }
+            }
+        }
+
+        return $status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isExists()
     {
         $db = $this->pdoDriver->initDb();
@@ -130,6 +166,14 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
+    public function isDelayed()
+    {
+        return (isset($this->options['startdate']) && $this->options['startdate'] instanceof \DateTime);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMessageLock($resultTest)
     {
         $key = $resultTest ? 'lexik_maintenance.success_lock_database' : 'lexik_maintenance.not_success_lock';
@@ -143,6 +187,16 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     public function getMessageUnlock($resultTest)
     {
         $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+
+        return $this->translator->trans($key, array(), 'maintenance');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessagePrepare($resultTest)
+    {
+        $key = $resultTest ? 'lexik_maintenance.success_prepare_database' : 'lexik_maintenance.not_success_prepare';
 
         return $this->translator->trans($key, array(), 'maintenance');
     }
@@ -170,4 +224,21 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     {
         return isset($this->options['ttl']);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStartDate($value)
+    {
+        $this->options['startdate'] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStartDate()
+    {
+        return $this->options['startdate'];
+    }
+
 }

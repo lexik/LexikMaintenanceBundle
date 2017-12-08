@@ -33,6 +33,16 @@ abstract class AbstractDriver
     }
 
     /**
+     * Returns true if lock is to be delayed.
+     * 
+     * @return boolean
+     */
+    public function isDelayed()
+    {
+        return false;
+    }
+
+    /**
      * Test if object exists
      *
      * @return boolean
@@ -100,7 +110,29 @@ abstract class AbstractDriver
     }
 
     /**
-     * the choice of the driver to less pass or not the user
+     * prepare delayed lock
+     *
+     * @return boolean
+     */
+    public function prepareLock()
+    {
+        return false; 
+    }
+
+    /**
+     * The feedback message
+     *
+     * @param boolean $resultTest The result of prepare lock
+     *
+     * @return string
+     */
+    public function getMessagePrepare($resultTest)
+    {
+        return $this->translator->trans('lexik_maintenance.not_success_prepare', array(), 'maintenance');
+    }
+
+    /**
+     * the choice of the driver to let the user pass or not 
      *
      * @return boolean
      */
