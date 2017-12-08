@@ -123,10 +123,6 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
                 $ttl = null;
                 if (isset($this->options['ttl']) && $this->options['ttl'] !== 0) {
                     $ttl = $this->options['ttl'];
-                    $ttlDate = $this->options['startdate'];
-                    /* @var $ttlDate \DateTime */
-                    $ttlDate->modify(sprintf('+%s seconds', $ttl));
-                    $ttl = $ttlDate->format('Y-m-d H:i:s');
                 }
                 try {
                     $status = $this->pdoDriver->insertStartdateQuery($ttl, $startDate, $db);
@@ -161,6 +157,42 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lockWhenPrepared()
+    {
+        $return = false;
+
+        if ($this->pdoDriver instanceof QueryStartdateInterface) {
+            // todo: handle situation where there is already a lock or a prepared lock
+            /* @var $this ->pdoDriver QueryStartdateInterface */
+
+            $db = $this->pdoDriver->initDb();
+            $data = $this->pdoDriver->selectStartdateQuery($db);
+
+            if (!$data) {
+                $return = false;
+            } elseif (null !== $data[0]['startdate']) {
+                $now = new \DateTime('now');
+                $ttl = $data[0]['ttl'] ? $data[0]['ttl'] : 0;
+                $startDate = new \DateTime($data[0]['startdate']);
+
+                if ($startDate < $now) {
+                    $this->pdoDriver->deleteQuery($db);
+                    $this->pdoDriver->deleteStartdateQuery($db);
+                    
+                    $this->options['ttl'] = $ttl;
+                    $this->lock();
+                    
+                    $return = true;
+                }
+            }
+        }
+
+        return $return;
     }
 
     /**

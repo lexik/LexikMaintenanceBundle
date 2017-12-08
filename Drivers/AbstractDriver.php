@@ -108,17 +108,7 @@ abstract class AbstractDriver
             return false;
         }
     }
-
-    /**
-     * prepare delayed lock
-     *
-     * @return boolean
-     */
-    public function prepareLock()
-    {
-        return false; 
-    }
-
+    
     /**
      * The feedback message
      *

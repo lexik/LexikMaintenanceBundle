@@ -10,6 +10,21 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
  */
 interface DriverStartdateInterface
 {
+
+    /**
+     * prepare delayed lock
+     *
+     * @return boolean
+     */
+    public function prepareLock();
+
+    /**
+     * Lock if prepared and start date achieved
+     *
+     * @return boolean
+     */
+    public function lockWhenPrepared();
+    
     /**
      * Set start date of lock
      *

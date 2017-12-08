@@ -53,7 +53,7 @@ class DefaultQuery extends PdoQuery implements QueryStartdateInterface
             sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE_LOCK, $type)
         );
         $this->db->exec(
-            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', self::NAME_TABLE_STARTDATE, $type, $type)
+            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', self::NAME_TABLE_STARTDATE, 'INT', $type)
         );
     }
 
