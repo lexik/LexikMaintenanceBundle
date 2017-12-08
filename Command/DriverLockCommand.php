@@ -40,7 +40,7 @@ class DriverLockCommand extends ContainerAwareCommand
     You can optionally set a time to live of the maintenance: <info>%command.full_name% 3600</info>
    
     You can set a start date or delay the start (from now) of the lock.    
-    Set the start date with: <info>%command.full_name% -s "24.12.2017 18:00"</info>
+    Set the start date with: <info>%command.full_name% -s "2017-12-24 18:00"</info>
     Or delay the lock with: <info>%command.full_name% -d 3600</info>
 
     You can execute the lock without a warning message which you need to interact with: <info>%command.full_name% --no-interaction</info>

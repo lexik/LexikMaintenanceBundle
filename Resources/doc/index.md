@@ -78,9 +78,10 @@ The ttl (time to live) option is optional everywhere, it is used to indicate the
 
 There are two commands:
 
-    lexik:maintenance:lock [--set-ttl]
+    lexik:maintenance:lock [ttl] [--startdate|-s startdate] [--delay|d delay]
 
-This command will enable the maintenance according with your configuration. You can pass the time to live of the maintenance in parameter, ``this doesn't works with file driver``.
+This command will enable the maintenance according with your configuration. You can pass the time to live of the maintenance in parameter, ``this doesn't work with file and shm driver``. 
+You can optionally pass the start date/time or a delay of how long to wait until maintenance , ``this does, so far, only work with database driver without dsn``.
 
     lexik:maintenance:unlock
 
@@ -90,9 +91,9 @@ You can execute the lock without a warning message which you need to interact wi
 
     lexik:maintenance:lock --no-interaction
 
-Or (with the optional ttl overwriting)
+Or (with the optional ttl overwriting and a start at Christmas)
 
-    lexik:maintenance:lock 3600 -n
+    lexik:maintenance:lock 3600 -s "2017-12-24 18:00" -n
 
 
 ---------------------
