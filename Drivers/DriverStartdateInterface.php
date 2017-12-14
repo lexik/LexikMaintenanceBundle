@@ -19,6 +19,13 @@ interface DriverStartdateInterface
     public function prepareLock();
 
     /**
+     * unschedule lock
+     *
+     * @return boolean
+     */
+    public function unscheduleLock();
+    
+    /**
      * Lock if prepared and start date achieved
      *
      * @return boolean

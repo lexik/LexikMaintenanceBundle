@@ -81,6 +81,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
                 $ttl = $this->options['ttl'];
                 $ttl = $now->modify(sprintf('+%s seconds', $ttl))->format('Y-m-d H:i:s');
             }
+            $this->pdoDriver->deleteStartdateQuery($db);
             $status = $this->pdoDriver->insertQuery($ttl, $db);
         } catch (\Exception $e) {
             $status = false;
@@ -113,9 +114,8 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
         $db = $this->pdoDriver->initDb();
         $status = false;
         
-        if ($this->pdoDriver instanceof QueryStartdateInterface)
+        if ($this->pdoDriver instanceof QueryStartdateInterface && !$this->isExists())
         {
-            // todo: handle situation where there is already a lock or a prepared lock
             /* @var $this->pdoDriver QueryStartdateInterface */
             $startDate = null;
             if (isset($this->options['startdate']) && $this->options['startdate'] instanceof \DateTime) {
@@ -125,6 +125,12 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
                     $ttl = $this->options['ttl'];
                 }
                 try {
+                    $data = $this->pdoDriver->selectStartdateQuery($db);
+                    if (!empty($data)) {
+                        // overwrite existing schedule
+                        $this->pdoDriver->deleteStartdateQuery($db);
+                    }
+                    
                     $status = $this->pdoDriver->insertStartdateQuery($ttl, $startDate, $db);
                 } catch (\Exception $e) {
                     $status = false;
@@ -133,6 +139,16 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
         }
 
         return $status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unscheduleLock()
+    {
+        $db = $this->pdoDriver->initDb();
+        
+        return $this->pdoDriver->unscheduleLock($db);
     }
 
     /**
@@ -164,35 +180,31 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
      */
     public function lockWhenPrepared()
     {
-        $return = false;
+        $status = false;
 
-        if ($this->pdoDriver instanceof QueryStartdateInterface) {
-            // todo: handle situation where there is already a lock or a prepared lock
+        if ($this->pdoDriver instanceof QueryStartdateInterface && !$this->isExists()) {
             /* @var $this ->pdoDriver QueryStartdateInterface */
-
             $db = $this->pdoDriver->initDb();
             $data = $this->pdoDriver->selectStartdateQuery($db);
 
-            if (!$data) {
-                $return = false;
+            if (empty($data)) {
+                $status = false;
             } elseif (null !== $data[0]['startdate']) {
                 $now = new \DateTime('now');
                 $ttl = $data[0]['ttl'] ? $data[0]['ttl'] : 0;
                 $startDate = new \DateTime($data[0]['startdate']);
 
                 if ($startDate < $now) {
-                    $this->pdoDriver->deleteQuery($db);
-                    $this->pdoDriver->deleteStartdateQuery($db);
                     
                     $this->options['ttl'] = $ttl;
                     $this->lock();
-                    
-                    $return = true;
+
+                    $status = true;
                 }
             }
         }
 
-        return $return;
+        return $status;
     }
 
     /**
@@ -233,6 +245,16 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
         return $this->translator->trans($key, array(), 'maintenance');
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageUnscheduleLock($resultTest)
+    {
+        $key = $resultTest ? 'lexik_maintenance.success_unschedule_database' : 'lexik_maintenance.not_success_unschedule';
+
+        return $this->translator->trans($key, array(), 'maintenance');
+    }
+    
     /**
      * {@inheritdoc}
      */

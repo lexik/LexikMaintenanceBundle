@@ -76,25 +76,42 @@ The ttl (time to live) option is optional everywhere, it is used to indicate the
 
 ### Commands
 
-There are two commands:
+There are four commands:
+* lexik:maintenance:lock
+* lexik:maintenance:unlock
+* lexik:maintenance:schedule-lock
+* lexik:maintenance:unschedule-lock
 
-    lexik:maintenance:lock [ttl] [--startdate|-s startdate] [--delay|d delay]
 
-This command will enable the maintenance according with your configuration. You can pass the time to live of the maintenance in parameter, ``this doesn't work with file and shm driver``. 
-You can optionally pass the start date/time or a delay of how long to wait until maintenance , ``this does, so far, only work with database driver without dsn``.
+    lexik:maintenance:lock [ttl]
+
+This command will enable the maintenance according with your configuration. You can pass the time to live of the maintenance in parameter, ``this doesn't work with file and shm driver``.
 
     lexik:maintenance:unlock
 
-This command will disable the maintenance
+This command will disable the maintenance.
 
-You can execute the lock without a warning message which you need to interact with:
+    lexik:maintenance:schedule-lock [delay] [--startdate|-s] [--ttl|t]
+
+Schedule maintenance mode to start after a delay or at a specific date, ``this does, so far, only work with database driver without dsn``.
+
+Example for a maintenance mode for one hour at Christmas, starting 18 o'clock: 
+
+    lexik:maintenance:schedule-lock 3600 -s "2017-12-24 18:00"
+
+The following command will unschedule a scheduled maintenance mode.
+
+    lexik:maintenance:unschedule-lock
+
+
+
+You can execute all these commands without a warning message which you need to interact with, e.g.:
 
     lexik:maintenance:lock --no-interaction
 
-Or (with the optional ttl overwriting and a start at Christmas)
+Or (with the optional ttl overwriting)
 
-    lexik:maintenance:lock 3600 -s "2017-12-24 18:00" -n
-
+    lexik:maintenance:lock 3600 -n
 
 ---------------------
 

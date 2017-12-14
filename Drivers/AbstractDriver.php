@@ -82,6 +82,30 @@ abstract class AbstractDriver
     abstract public function getMessageUnlock($resultTest);
 
     /**
+     * The feedback message
+     *
+     * @param boolean $resultTest The result of prepare lock
+     *
+     * @return string
+     */
+    public function getMessagePrepare($resultTest)
+    {
+        return $this->translator->trans('lexik_maintenance.not_success_prepare', array(), 'maintenance');
+    }
+
+    /**
+     * The feedback message
+     *
+     * @param boolean $resultTest The result of unschedule lock
+     *
+     * @return string
+     */
+    public function getMessageUnscheduleLock($resultTest)
+    {
+        return $this->translator->trans('lexik_maintenance.not_success_unschedule', array(), 'maintenance');
+    }
+
+    /**
      * The response of lock
      *
      * @return boolean
@@ -109,18 +133,6 @@ abstract class AbstractDriver
         }
     }
     
-    /**
-     * The feedback message
-     *
-     * @param boolean $resultTest The result of prepare lock
-     *
-     * @return string
-     */
-    public function getMessagePrepare($resultTest)
-    {
-        return $this->translator->trans('lexik_maintenance.not_success_prepare', array(), 'maintenance');
-    }
-
     /**
      * the choice of the driver to let the user pass or not 
      *
