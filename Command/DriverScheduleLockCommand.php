@@ -56,7 +56,7 @@ EOT
                 // set start date from command line if given and driver supports it
                 $driver->setStartDate($this->startdate);
                 $driver->setTtl($this->ttl);
-                $message = $driver->getMessagePrepare($driver->prepareLock());
+                $message = $driver->getMessageScheduleLock($driver->scheduleLock());
             } else {
                 // this message is already generated within interact()
                 $message = sprintf('<fg=red>Delay or start date must be set.</>', get_class($driver));

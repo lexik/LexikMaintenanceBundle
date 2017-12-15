@@ -38,7 +38,7 @@ EOT
             return;
         }
 
-        $driver = $this->getDriver();
+        $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
 
         if ($driver instanceof DriverStartdateInterface) {
             $message = $driver->getMessageUnscheduleLock($driver->unscheduleLock());

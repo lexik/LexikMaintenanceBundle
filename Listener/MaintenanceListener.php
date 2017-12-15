@@ -149,9 +149,9 @@ class MaintenanceListener
         $driver = $this->driverFactory->getDriver();
         /* @var $driver AbstractDriver */
         
-        // before checking if we are in maintenance mode we check if maintenance mode was prepared to start now
+        // before checking if we are in maintenance mode we check if maintenance mode was scheduled to start now
         if ($driver instanceof DriverStartdateInterface){
-            $driver->lockWhenPrepared();
+            $driver->lockWhenScheduled();
         }
         
         if(!$event->isMasterRequest()){

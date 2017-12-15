@@ -84,13 +84,13 @@ abstract class AbstractDriver
     /**
      * The feedback message
      *
-     * @param boolean $resultTest The result of prepare lock
+     * @param boolean $resultTest The result of schedule lock
      *
      * @return string
      */
-    public function getMessagePrepare($resultTest)
+    public function getMessageScheduleLock($resultTest)
     {
-        return $this->translator->trans('lexik_maintenance.not_success_prepare', array(), 'maintenance');
+        return $this->translator->trans('lexik_maintenance.not_success_schedule', array(), 'maintenance');
     }
 
     /**

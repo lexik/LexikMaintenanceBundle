@@ -12,11 +12,11 @@ interface DriverStartdateInterface
 {
 
     /**
-     * prepare delayed lock
+     * schedule delayed lock
      *
      * @return boolean
      */
-    public function prepareLock();
+    public function scheduleLock();
 
     /**
      * unschedule lock
@@ -26,11 +26,11 @@ interface DriverStartdateInterface
     public function unscheduleLock();
     
     /**
-     * Lock if prepared and start date achieved
+     * Lock if scheduled and start date achieved
      *
      * @return boolean
      */
-    public function lockWhenPrepared();
+    public function lockWhenScheduled();
     
     /**
      * Set start date of lock

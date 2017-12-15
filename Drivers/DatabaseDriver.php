@@ -109,7 +109,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     /**
      * {@inheritdoc}
      */
-    public function prepareLock()
+    public function scheduleLock()
     {
         $db = $this->pdoDriver->initDb();
         $status = false;
@@ -147,8 +147,15 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     public function unscheduleLock()
     {
         $db = $this->pdoDriver->initDb();
+        /* @var $this->pdoDriver QueryStartdateInterface */
+
+        $data = $this->pdoDriver->selectStartdateQuery($db);
+        if (empty($data)) {
+            // overwrite existing schedule
+            return false;
+        }
         
-        return $this->pdoDriver->unscheduleLock($db);
+        return $this->pdoDriver->deleteStartdateQuery($db);
     }
 
     /**
@@ -158,9 +165,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     {
         $db = $this->pdoDriver->initDb();
         $data = $this->pdoDriver->selectQuery($db);
-
-        if (!$data) {
-            return null;
+        
+        if (empty($data)) {
+            return false;
         }
 
         if (null !== $data[0]['ttl']) {
@@ -178,7 +185,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     /**
      * {@inheritdoc}
      */
-    public function lockWhenPrepared()
+    public function lockWhenScheduled()
     {
         $status = false;
 
@@ -238,9 +245,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     /**
      * {@inheritdoc}
      */
-    public function getMessagePrepare($resultTest)
+    public function getMessageScheduleLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_prepare_database' : 'lexik_maintenance.not_success_prepare';
+        $key = $resultTest ? 'lexik_maintenance.success_schedule_database' : 'lexik_maintenance.not_success_schedule';
 
         return $this->translator->trans($key, array(), 'maintenance');
     }
