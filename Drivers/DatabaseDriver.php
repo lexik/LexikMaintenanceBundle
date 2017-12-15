@@ -185,6 +185,25 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
     /**
      * {@inheritdoc}
      */
+    public function isExistsSchedule()
+    {
+        $db = $this->pdoDriver->initDb();
+        $data = $this->pdoDriver->selectStartdateQuery($db);
+        
+        if (!empty($data)) {
+            //quick fix: set data
+            $this->options['startdate'] = $data[0]['startdate'];
+            $this->options['ttl'] = $data[0]['ttl'];
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function lockWhenScheduled()
     {
         $status = false;
@@ -299,7 +318,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface, Drive
      */
     public function getStartDate()
     {
-        return $this->options['startdate'];
+        return new \DateTime($this->options['startdate']);
     }
 
 }

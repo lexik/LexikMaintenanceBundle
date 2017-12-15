@@ -46,4 +46,11 @@ interface DriverStartdateInterface
      */
     public function getStartDate();
 
+    /**
+     * Test if maintenace is scheduled
+     *
+     * @return boolean
+     */
+    public function isExistsSchedule();
+
 }
