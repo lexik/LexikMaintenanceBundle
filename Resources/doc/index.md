@@ -109,7 +109,7 @@ You can execute all these commands without a warning message which you need to i
 
     lexik:maintenance:lock --no-interaction
 
-Or (with the optional ttl overwriting)
+Or (with the optional ttl overwriting):
 
     lexik:maintenance:lock 3600 -n
 

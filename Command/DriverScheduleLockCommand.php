@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DriverScheduleLockCommand extends AbstractLockCommand
 {
-    protected $ttl;
     protected $startdate;
 
     public function getTtlFromInput(InputInterface $input)
