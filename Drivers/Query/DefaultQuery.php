@@ -49,12 +49,35 @@ class DefaultQuery extends PdoQuery implements QueryStartdateInterface
     {
         $type = $this->em->getConnection()->getDatabasePlatform()->getName() != 'mysql' ? 'timestamp' : 'datetime';
 
-        $this->db->exec(
-            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE_LOCK, $type)
-        );
-        $this->db->exec(
-            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', self::NAME_TABLE_STARTDATE, 'INT', $type)
-        );
+        if ($this->em->getConnection()->getDatabasePlatform()->getName() === 'oracle') {
+            $lockTableFound = false;
+            $startDateTableFound = false;
+            foreach ($this->fetch($this->db, $this->em->getConnection()->getDatabasePlatform()->getListTablesSQL()) as $tableInfo) {
+                if ($tableInfo['TABLE_NAME'] === strtoupper(self::NAME_TABLE_LOCK)) {
+                    $lockTableFound = true;
+                } elseif ($tableInfo['TABLE_NAME'] === strtoupper(self::NAME_TABLE_STARTDATE)) {
+                    $startDateTableFound = true;
+                }
+            }
+
+            if ($lockTableFound === false) {
+                $this->db->exec(
+                    sprintf('CREATE TABLE %s (ttl %s DEFAULT NULL)', strtoupper(self::NAME_TABLE_LOCK), $type)
+                );
+            }
+            if ($startDateTableFound === false) {
+                $this->db->exec(
+                    sprintf('CREATE TABLE %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', strtoupper(self::NAME_TABLE_STARTDATE), 'INT', $type)
+                );
+            }
+        } else {
+            $this->db->exec(
+                sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE_LOCK, $type)
+            );
+            $this->db->exec(
+                sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL, startdate %s DEFAULT NULL)', self::NAME_TABLE_STARTDATE, 'INT', $type)
+            );
+        }
     }
 
     /**
