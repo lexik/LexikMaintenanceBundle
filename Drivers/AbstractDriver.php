@@ -33,6 +33,16 @@ abstract class AbstractDriver
     }
 
     /**
+     * Returns true if lock is to be delayed.
+     * 
+     * @return boolean
+     */
+    public function isDelayed()
+    {
+        return false;
+    }
+
+    /**
      * Test if object exists
      *
      * @return boolean
@@ -72,6 +82,30 @@ abstract class AbstractDriver
     abstract public function getMessageUnlock($resultTest);
 
     /**
+     * The feedback message
+     *
+     * @param boolean $resultTest The result of schedule lock
+     *
+     * @return string
+     */
+    public function getMessageScheduleLock($resultTest)
+    {
+        return $this->translator->trans('lexik_maintenance.not_success_schedule', array(), 'maintenance');
+    }
+
+    /**
+     * The feedback message
+     *
+     * @param boolean $resultTest The result of unschedule lock
+     *
+     * @return string
+     */
+    public function getMessageUnscheduleLock($resultTest)
+    {
+        return $this->translator->trans('lexik_maintenance.not_success_unschedule', array(), 'maintenance');
+    }
+
+    /**
      * The response of lock
      *
      * @return boolean
@@ -98,9 +132,9 @@ abstract class AbstractDriver
             return false;
         }
     }
-
+    
     /**
-     * the choice of the driver to less pass or not the user
+     * the choice of the driver to let the user pass or not 
      *
      * @return boolean
      */

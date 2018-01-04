@@ -2,7 +2,9 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Listener;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Lexik\Bundle\MaintenanceBundle\Drivers\DriverStartdateInterface;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -82,6 +84,10 @@ class MaintenanceListener
      */
     protected $handleResponse = false;
 
+	/**
+	 * @var bool
+	 */
+	protected $authorized = true;
     /**
      * @var bool
      */
@@ -143,6 +149,15 @@ class MaintenanceListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        // Get driver class defined in your configuration
+        $driver = $this->driverFactory->getDriver();
+        /* @var $driver AbstractDriver */
+        
+        // before checking if we are in maintenance mode we check if maintenance mode was scheduled to start now
+        if ($driver instanceof DriverStartdateInterface){
+            $driver->lockWhenScheduled();
+        }
+        
         if(!$event->isMasterRequest()){
             return;
         }
@@ -189,9 +204,8 @@ class MaintenanceListener
         if (null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
             return;
         }
-
-        // Get driver class defined in your configuration
-        $driver = $this->driverFactory->getDriver();
+        
+        $this->authorized = false;
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this->handleResponse = true;
@@ -214,6 +228,24 @@ class MaintenanceListener
             $response->setStatusCode($this->http_code, $this->http_status);
         }
     }
+
+	/**
+	 * @return bool
+	 */
+	public function isAuthorized()
+	{
+		return $this->authorized;
+	}
+
+	/**
+	 * @param bool $authorized
+	 * @return MaintenanceListener
+	 */
+	public function setAuthorized($authorized)
+	{
+		$this->authorized = $authorized;
+		return $this;
+	}
 
     /**
      * Checks if the requested ip is valid.

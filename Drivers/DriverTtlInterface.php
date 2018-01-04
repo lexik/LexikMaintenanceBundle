@@ -11,14 +11,14 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 interface DriverTtlInterface
 {
     /**
-     * Set time to life for overwrite basic configuration
+     * Set time to live for overwrite basic configuration
      *
      * @param integer $value ttl value
      */
     public function setTtl($value);
 
     /**
-     * Return time to life
+     * Return time to live
      *
      * @return integer
      */

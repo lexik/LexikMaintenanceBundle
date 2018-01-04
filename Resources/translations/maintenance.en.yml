@@ -5,3 +5,7 @@ lexik_maintenance.success_lock_database: Server is under maintenance with driver
 lexik_maintenance.success_lock_file: Server is under maintenance with driver file.
 lexik_maintenance.success_lock_memc: Server is under maintenance with memcache.
 lexik_maintenance.success_lock_shm: Server is under maintenance with shm.
+lexik_maintenance.success_schedule_database: Server is scheduled for maintenance with driver database.
+lexik_maintenance.not_success_schedule: Impossible to schedule maintenance.
+lexik_maintenance.success_unschedule_database: Maintenance mode has been unscheduled.
+lexik_maintenance.not_success_unschedule: Impossible to unschedule maintenance mode.

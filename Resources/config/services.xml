@@ -39,5 +39,13 @@
         <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand">
             <tag name="console.command"/>
         </service>
+
+        <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverScheduleLockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverScheduleLockCommand">
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverUnscheduleLockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverUnscheduleLockCommand">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>
