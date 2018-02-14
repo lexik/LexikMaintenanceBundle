@@ -64,15 +64,16 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             class: 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'             # class for database driver
 
             # Option 1 : for doctrine
-            options: {connection: custom}                                            # Optional. You can choice an other connection. Without option it's the doctrine default connection who will be used
+            options: {connection: custom}                                              # Optional. You can choice an other connection. Without option it's the doctrine default connection who will be used
 
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
             options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password
 
         #Optional. response code and status of the maintenance page
         response:
-            code: 503
-            status: "Service Temporarily Unavailable"
+            code: 503                                                                  # Http response code of Exception page
+            status: "Service Temporarily Unavailable"                                  # Exception page title
+            exception_message: "Service Temporarily Unavailable"                       # Message when Exception is thrown 
 
 
 ### Commands
@@ -109,7 +110,7 @@ In the listener, an exception is thrown when web site is under maintenance. This
 
 .. note::
 
-    You must remember that this only works if Symfony2 works.
+    You must remember that this only works if Symfony works.
 
 ----------------------
 
