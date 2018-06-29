@@ -1,6 +1,8 @@
 OVERVIEW
 ========
 
+WARNING, this project is a fork of https://github.com/lexik/LexikMaintenanceBundle/ with Redis support (cherry picked from https://github.com/lexik/LexikMaintenanceBundle/pull/65).
+
 This bundle allows you to place your website in maintenance mode by calling two commands in your console. A page with status code 503 appears to users, 
 it is possible to authorize certain ips addresses stored in your configuration
 
