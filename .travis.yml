@@ -9,6 +9,9 @@ php:
   - 7.2
   - hhvm
 
+services:
+  - redis-server
+
 sudo: false
 
 cache:
