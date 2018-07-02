@@ -1,5 +1,5 @@
 {
-    "name": "kilik/maintenance-bundle",
+    "name": "ypr/maintenance-bundle",
     "type": "symfony-bundle",
     "description": "Fork of LexixMaintenanceBundle with Redis support.",
     "keywords": ["Symfony", "bundle", "maintenance"],
