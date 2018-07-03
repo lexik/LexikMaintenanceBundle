@@ -61,7 +61,7 @@ class DriverFactory
         $this->dbDriver = $dbDriver;
         $this->translator = $translator;
         $this->container = $container;
-        $this->serviceName = $driverOptions['options']['service'] ?: null;
+        $this->serviceName = $driverOptions['options']['service'] ?? null;
     }
 
     /**
