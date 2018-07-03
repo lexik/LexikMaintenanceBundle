@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
+use Predis\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -29,6 +30,16 @@ class DriverFactory
      */
     protected $translator;
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var string
+     */
+    protected $serviceName;
+
     const DATABASE_DRIVER = 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
@@ -39,7 +50,7 @@ class DriverFactory
      * @param array               $driverOptions Options driver
      * @throws \ErrorException
      */
-    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, array $driverOptions)
+    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, ContainerInterface $container, array $driverOptions)
     {
         $this->driverOptions = $driverOptions;
 
@@ -49,6 +60,8 @@ class DriverFactory
 
         $this->dbDriver = $dbDriver;
         $this->translator = $translator;
+        $this->container = $container;
+        $this->serviceName = $driverOptions['options']['service'] ?: null;
     }
 
     /**
@@ -69,7 +82,11 @@ class DriverFactory
             $driver = $this->dbDriver;
             $driver->setOptions($this->driverOptions['options']);
         } else {
-            $driver = new $class($this->driverOptions['options']);
+            $options = $this->driverOptions['options'];
+            if (!empty($this->serviceName)) {
+                $options = array_merge($options, ['service' => $this->container->get($this->serviceName)]);
+            }
+            $driver = new $class($options);
         }
 
         $driver->setTranslator($this->translator);
