@@ -13,6 +13,7 @@
         <service id="lexik_maintenance.driver.factory" class="%lexik_maintenance.driver_factory.class%" public="true">
             <argument type="service" id="lexik_maintenance.driver.database" />
             <argument type="service" id="translator.default" />
+            <argument type="service" id="service_container" />
             <argument>%lexik_maintenance.driver%</argument>
         </service>
 

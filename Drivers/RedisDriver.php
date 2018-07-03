@@ -1,6 +1,7 @@
 <?php
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+use Predis\Client as PredisClient;
 
 /**
  * Class RedisDriver
@@ -10,17 +11,9 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 class RedisDriver extends AbstractDriver implements DriverTtlInterface
 {
     /**
-     * The key to store in redis.
-     *
-     * @var string
-     */
-    protected $keyName;
-
-    /**
      * @var \Predis\Client
      */
     protected $redisInstance;
-
 
     /**
      * RedisDriver constructor.
@@ -29,30 +22,26 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function __construct(array $options = array())
     {
+        if (empty($options['service'])) {
+            throw new \InvalidArgumentException('Option "service" must be defined in the RedisDriver configuration');
+        }
+        if (! $options['service'] instanceof PredisClient) {
+            throw new \InvalidArgumentException(sprintf('Service must be a Predis/Client. (%s given)', get_class($options['service'])));
+        }
+
+        if (empty($options['key_name'])) {
+            throw new \InvalidArgumentException('Option "key_name" must be defined in the RedisDriver configuration');
+        }
+
+        if (!isset($options['ttl']) || !is_numeric($options['ttl'])) {
+            $options['ttl'] = 0;
+        } else {
+            $options['ttl'] = intval($options['ttl']);
+        }
+
         parent::__construct($options);
-
-        if (!isset($options['key_name'])) {
-            throw new \InvalidArgumentException('$options[\'key_name\'] must be defined if Driver Redis configuration is used');
-        }
-
-        if (!isset($options['connection_parameters'])) {
-            throw new \InvalidArgumentException('$options[\'connection_parameters\'] must be defined if Driver Redis configuration is used');
-        }
-
-        if (null !== $options) {
-            if (!isset($options['ttl']) || !is_numeric($options['ttl'])) {
-                $options['ttl'] = 0;
-            } else {
-                $options['ttl'] = intval($options['ttl']);
-            }
-
-            $this->keyName = $options['key_name'];
-
-            $this->redisInstance = new \Predis\Client($options['connection_parameters']);
-            $this->redisInstance->connect();
-        }
-
-        $this->options = $options;
+        $this->redisInstance = $options['service'];
+        $this->redisInstance->connect();
     }
 
     function __destruct()
@@ -64,13 +53,12 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
         unset($this->redisInstance);
     }
 
-
     /**
      * {@inheritdoc}
      */
     protected function createLock()
     {
-        return ($this->redisInstance->setex($this->keyName, $this->options['ttl'], true) === 'OK');
+        return ($this->redisInstance->setex($this->options['key_name'], $this->options['ttl'], true) === 'OK');
     }
 
     /**
@@ -78,7 +66,7 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     protected function createUnlock()
     {
-        return $this->redisInstance->del(array($this->keyName)) > 0;
+        return $this->redisInstance->del(array($this->options['key_name'])) > 0;
     }
 
     /**
@@ -86,7 +74,7 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function isExists()
     {
-        return $this->redisInstance->exists($this->keyName);
+        return $this->redisInstance->exists($this->options['key_name']);
     }
 
     /**
