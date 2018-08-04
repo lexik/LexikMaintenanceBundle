@@ -8,8 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver;
 
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-
 /**
  * Test redis
  *
@@ -48,6 +46,35 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithNotPortNumber()
     {
         $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 'roti'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructWithNotTtl()
+    {
+        $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'ttl' => 'roti'));
+    }
+
+    public function testConstruct()
+    {
+        $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379));
+
+        $this->assertInstanceOf(RedisDriver::class, $redis);
+    }
+
+    public function testConstructWithTtl()
+    {
+        $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379, 'ttl' => 10));
+
+        $this->assertInstanceOf(RedisDriver::class, $redis);
+    }
+
+    public function testConstructWithTtlZero()
+    {
+        $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379, 'ttl' => 0));
+
+        $this->assertInstanceOf(RedisDriver::class, $redis);
     }
 
     protected function initContainer()

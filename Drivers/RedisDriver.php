@@ -50,8 +50,12 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
 
         if ( ! isset($options['port'])) {
             throw new \InvalidArgumentException('$options[\'port\'] must be defined if Driver Redis configuration is used');
-        } elseif (! is_int($options['port'])) {
+        } elseif ( ! is_int($options['port'])) {
             throw new \InvalidArgumentException('$options[\'port\'] must be an integer if Driver Redis configuration is used');
+        }
+
+        if (isset($options['ttl']) && ! is_int($options['ttl'])) {
+            throw new \InvalidArgumentException('$options[\'ttl\'] should be an integer if Driver Redis configuration is used');
         }
 
         if (null !== $options) {
@@ -70,7 +74,11 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     protected function createLock()
     {
-        return $this->redisInstance->setex($this->keyName, isset($this->options['ttl']) ? $this->options['ttl'] : 0, self::VALUE_TO_STORE);
+        if ( ! isset($this->options['ttl']) || $this->options['ttl'] <= 0) {
+            return $this->redisInstance->set($this->keyName, self::VALUE_TO_STORE);
+        }
+
+        return $this->redisInstance->setex($this->keyName, $this->options['ttl'], self::VALUE_TO_STORE);
     }
 
     /**
