@@ -78,6 +78,11 @@ class MaintenanceListener
     protected $http_status;
 
     /**
+     * @var null|String
+     */
+    protected $http_exception_message;
+
+    /**
      * @var bool
      */
     protected $handleResponse = false;
@@ -106,6 +111,7 @@ class MaintenanceListener
      * @param array $attributes Attributes
      * @param Int $http_code http status code for response
      * @param String $http_status http status message for response
+     * @param null $http_exception_message http response page exception message
      * @param bool $debug
      */
     public function __construct(
@@ -119,6 +125,7 @@ class MaintenanceListener
         $attributes = array(),
         $http_code = null,
         $http_status = null,
+        $http_exception_message = null,
         $debug = false
     ) {
         $this->driverFactory = $driverFactory;
@@ -131,6 +138,7 @@ class MaintenanceListener
         $this->attributes = $attributes;
         $this->http_code = $http_code;
         $this->http_status = $http_status;
+        $this->http_exception_message = $http_exception_message;
         $this->debug = $debug;
     }
 
@@ -181,7 +189,7 @@ class MaintenanceListener
             return;
         }
 
-        if (count($this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
+        if (count((array) $this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
             return;
         }
 
@@ -195,10 +203,8 @@ class MaintenanceListener
 
         if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this->handleResponse = true;
-            throw new ServiceUnavailableException();
+            throw new ServiceUnavailableException($this->http_exception_message);
         }
-
-        return;
     }
 
     /**

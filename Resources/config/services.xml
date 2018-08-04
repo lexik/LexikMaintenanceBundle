@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="lexik_maintenance.driver.factory" class="%lexik_maintenance.driver_factory.class%">
+        <service id="lexik_maintenance.driver.factory" class="%lexik_maintenance.driver_factory.class%" public="true">
             <argument type="service" id="lexik_maintenance.driver.database" />
             <argument type="service" id="translator.default" />
             <argument>%lexik_maintenance.driver%</argument>
@@ -29,7 +29,16 @@
             <argument>%lexik_maintenance.authorized.attributes%</argument>
             <argument>%lexik_maintenance.response.http_code%</argument>
             <argument>%lexik_maintenance.response.http_status%</argument>
+            <argument>%lexik_maintenance.response.exception_message%</argument>
             <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand">
+            <tag name="console.command"/>
+        </service>
+
+        <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand">
+            <tag name="console.command"/>
         </service>
     </services>
 </container>
