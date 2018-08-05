@@ -60,21 +60,21 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     {
         $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379));
 
-        $this->assertInstanceOf(RedisDriver::class, $redis);
+        $this->assertInstanceOf('Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver', $redis);
     }
 
     public function testConstructWithTtl()
     {
         $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379, 'ttl' => 10));
 
-        $this->assertInstanceOf(RedisDriver::class, $redis);
+        $this->assertInstanceOf('Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver', $redis);
     }
 
     public function testConstructWithTtlZero()
     {
         $redis = new RedisDriver(array('key_name' => 'mnt', 'host' => '127.0.0.1', 'port' => 6379, 'ttl' => 0));
 
-        $this->assertInstanceOf(RedisDriver::class, $redis);
+        $this->assertInstanceOf('Lexik\Bundle\MaintenanceBundle\Drivers\RedisDriver', $redis);
     }
 
     protected function initContainer()
