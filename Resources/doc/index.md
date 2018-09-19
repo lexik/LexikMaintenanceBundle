@@ -99,6 +99,19 @@ Or (with the optional ttl overwriting)
 
 ---------------------
 
+### Events
+
+Events are thrown before and after locking and unlocking of the site, so that you can easily add other actions to the
+act of making the site available or not. For example, you might want to disable external site monitoring for the duration
+of your maintenance period.
+
+The events are:
+
+* `Lexik\Bundle\MaintenanceBundle\Event\PreLockEvent::NAME` - Throw just before the lock is engaged
+* `Lexik\Bundle\MaintenanceBundle\Event\PostLockEvent::NAME` - Throw just after the lock is engaged
+* `Lexik\Bundle\MaintenanceBundle\Event\PreUnlockEvent::NAME` - Throw just before the lock is removed
+* `Lexik\Bundle\MaintenanceBundle\Event\PostUnlockEvent::NAME` - Throw just after the lock is removed
+
 Custom error page 503
 ---------------------
 
