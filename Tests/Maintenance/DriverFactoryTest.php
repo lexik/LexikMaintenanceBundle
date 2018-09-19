@@ -27,7 +27,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
     }
 
@@ -47,14 +47,14 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionConstructor()
     {
-        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), array());
+        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $this->getEventDispatcher(), array());
     }
 
     public function testWithDatabaseChoice()
     {
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
-        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
+        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
 
         $this->container->set('lexik_maintenance.driver.factory', $factory);
 
@@ -65,7 +65,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $driverOptions = array('class' => '\Unknown', 'options' => null);
 
-        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
+        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $factory);
 
         try {
@@ -108,5 +108,13 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         return TestHelper::getTranslator($this->container, $messageSelector);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 }

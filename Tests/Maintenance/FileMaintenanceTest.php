@@ -78,6 +78,7 @@ class FileMaintenanceTest extends TestCase
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
+        $fileM->setEventDispatcher($this->getEventDispatcher());
         $fileM->lock();
 
         $fileM->unlock();
@@ -91,6 +92,7 @@ class FileMaintenanceTest extends TestCase
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
+        $fileM->setEventDispatcher($this->getEventDispatcher());
         $fileM->lock();
 
         $this->assertTrue($fileM->isEndTime(3600));
@@ -102,6 +104,7 @@ class FileMaintenanceTest extends TestCase
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
+        $fileM->setEventDispatcher($this->getEventDispatcher());
         $fileM->lock();
 
         // lock
@@ -140,5 +143,13 @@ class FileMaintenanceTest extends TestCase
             ->getMock();
 
         return TestHelper::getTranslator($this->container, $messageSelector);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 }
