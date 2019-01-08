@@ -30,8 +30,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $db;
 
     /**
-     *
-     * @var PdoDriver
+     * @var PdoQuery
      */
     protected $pdoDriver;
 
