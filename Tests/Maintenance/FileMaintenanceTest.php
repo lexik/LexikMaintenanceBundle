@@ -4,9 +4,10 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
 use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * Test driver file
@@ -134,11 +135,11 @@ class FileMaintenanceTest extends TestCase
 
     public function getTranslator()
     {
-        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
-        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
+        /** @var IdentityTranslator|MockObject $identityTranslator */
+        $identityTranslator = $this->getMockBuilder(IdentityTranslator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        return TestHelper::getTranslator($this->container, $messageSelector);
+        return TestHelper::getTranslator($this->container, $identityTranslator);
     }
 }
