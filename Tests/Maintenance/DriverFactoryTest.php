@@ -7,7 +7,7 @@ use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Component\Translation\IdentityTranslator;
 
 /**
  * Test driver factory
@@ -104,11 +104,11 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function getTranslator()
     {
-        /** @var MessageSelector|MockObject $messageSelector */
-        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
+        /** @var IdentityTranslator|MockObject $identityTranslator */
+        $identityTranslator = $this->getMockBuilder(IdentityTranslator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        return TestHelper::getTranslator($this->container, $messageSelector);
+        return TestHelper::getTranslator($this->container, $identityTranslator);
     }
 }
