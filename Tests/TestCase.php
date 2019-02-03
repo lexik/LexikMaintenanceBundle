@@ -8,7 +8,7 @@ require_once __DIR__.'/../../../../app/AppKernel.php';
  * A PHPUnit testcase with some Symfony2 tools.
  *
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Symfony\Component\HttpKernel\AppKernel
@@ -28,7 +28,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Initialize kernel app and some Symfony2 services.
      *
-     * @see \PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp()
     {
@@ -46,7 +46,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see \PHPUnit_Framework_TestCase::tearDown()
+     * @see \PHPUnit\Framework\TestCase::tearDown()
      */
     protected function tearDown()
     {

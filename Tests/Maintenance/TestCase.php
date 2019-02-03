@@ -8,7 +8,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     static protected $files;
 
