@@ -1,13 +1,8 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
   - 7.2
-  - hhvm
+  - 7.3
 
 sudo: false
 
@@ -18,16 +13,15 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - php: 5.3
-      env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
-      dist: precise
-    - php: 5.6
-      env: SYMFONY_VERSION='2.8.*'
-    - php: 7.1
-      env: SYMFONY_VERSION='^3.0'
-    - php: 7.1
-      env: DEPENDENCIES=beta
     - php: 7.2
+      env: COMPOSER_FLAGS="--prefer-lowest" SYMFONY_DEPRECATIONS_HELPER=weak
+    - php: 7.2
+      env: SYMFONY_VERSION='^3.0'
+    - php: 7.2
+      env: SYMFONY_VERSION='^4.0'
+    - php: 7.3
+      env: SYMFONY_VERSION='^4.0'
+    - php: 7.3
       env: DEPENDENCIES=beta
 
 before_install:
