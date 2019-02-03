@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class MemCacheTest extends \PHPUnit_Framework_TestCase
+class MemCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException InvalidArgumentException

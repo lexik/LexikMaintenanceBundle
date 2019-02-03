@@ -4,6 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Component\Translation\MessageSelector;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
+class MaintenanceListenerTest extends \PHPUnit\Framework\TestCase
 {
     protected
         $container,
@@ -311,7 +312,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
      * Get a mock DatabaseDriver
      *
      * @param boolean $lock
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getDatabaseDriver($lock = false)
     {
@@ -337,7 +338,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function getTranslator()
     {
-        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
+        /** @var MessageSelector|MockObject $messageSelector */
         $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
             ->disableOriginalConstructor()
             ->getMock();
