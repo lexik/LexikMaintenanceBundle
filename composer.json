@@ -33,7 +33,8 @@
     },
     "suggest": {
         "doctrine/doctrine-bundle": "For database site locking",
-        "ext-memcache": "For memcache site locking"
+        "ext-memcache": "For memcache site locking - Probably don't use this as the ext-memcache has been superseded by ext-memcached",
+        "ext-memcached": "For memcached site locking"
     },
     "autoload":     {
         "psr-4": { "Lexik\\Bundle\\MaintenanceBundle\\": "" }
