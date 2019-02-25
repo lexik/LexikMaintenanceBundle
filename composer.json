@@ -22,11 +22,19 @@
     "require": {
         "php": ">=5.3.9",
         "symfony/framework-bundle": "~2.7|~3.0|^4.0",
-        "symfony/translation": "~2.7|~3.0|^4.0"
+        "symfony/translation": "~2.7|~3.0|^4.0",
+        "symfony/event-dispatcher": "~2.7|~3.0|^4.0",
+        "symfony/console": "~2.7|~3.0|^4.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "~2.7|~3.0|^4.0",
-        "phpunit/phpunit": "~4.8|~5.7.11"
+        "phpunit/phpunit": "~4.8|~5.7.11",
+        "doctrine/doctrine-bundle": "^1.0"
+    },
+    "suggest": {
+        "doctrine/doctrine-bundle": "For database site locking",
+        "ext-memcache": "For memcache site locking - Probably don't use this as the ext-memcache has been superseded by ext-memcached",
+        "ext-memcached": "For memcached site locking"
     },
     "autoload":     {
         "psr-4": { "Lexik\\Bundle\\MaintenanceBundle\\": "" }

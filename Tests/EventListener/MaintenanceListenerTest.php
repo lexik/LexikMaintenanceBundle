@@ -38,7 +38,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(false),$this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(false), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
@@ -47,7 +47,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $listener = new MaintenanceListenerTestWrapper($this->factory, 'path', 'host', array('ip'), array('query'), array('cookie'), 'route');
         $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve with args');
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
@@ -72,7 +72,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null);
@@ -103,7 +103,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null);
@@ -137,7 +137,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null);
@@ -171,7 +171,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array(), array(), $debug);
@@ -219,7 +219,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null);
@@ -259,7 +259,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $this->getEventDispatcher(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, null);
@@ -343,5 +343,13 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         return TestHelper::getTranslator($this->container, $messageSelector);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 }

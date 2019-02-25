@@ -4,6 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -29,17 +30,23 @@ class DriverFactory
      */
     protected $translator;
 
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
     const DATABASE_DRIVER = 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
      * Constructor driver factory
      *
-     * @param DatabaseDriver      $dbDriver The databaseDriver Service
-     * @param TranslatorInterface $translator The translator service
-     * @param array               $driverOptions Options driver
+     * @param DatabaseDriver           $dbDriver        The databaseDriver Service
+     * @param TranslatorInterface      $translator      The translator service
+     * @param EventDispatcherInterface $eventDispatcher Event Dispatcher
+     * @param array                    $driverOptions   Options driver
      * @throws \ErrorException
      */
-    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, array $driverOptions)
+    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, EventDispatcherInterface $eventDispatcher, array $driverOptions)
     {
         $this->driverOptions = $driverOptions;
 
@@ -49,6 +56,7 @@ class DriverFactory
 
         $this->dbDriver = $dbDriver;
         $this->translator = $translator;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -73,6 +81,7 @@ class DriverFactory
         }
 
         $driver->setTranslator($this->translator);
+        $driver->setEventDispatcher($this->eventDispatcher);
 
         return $driver;
     }

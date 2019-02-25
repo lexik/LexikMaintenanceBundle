@@ -11,6 +11,11 @@
          syntaxCheck="false"
          bootstrap="vendor/autoload.php"
 >
+    <php>
+        <!-- Added this to stop it complaining about the deprecated Symfony\Component\Translation\MessageSelector in a test -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="1"/>
+    </php>
+
     <testsuites>
         <testsuite name="LexikMaintenanceBundle Test Suite">
             <directory>./Tests/</directory>

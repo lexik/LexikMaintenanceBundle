@@ -2,6 +2,11 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
+use Lexik\Bundle\MaintenanceBundle\Event\PostLockEvent;
+use Lexik\Bundle\MaintenanceBundle\Event\PostUnlockEvent;
+use Lexik\Bundle\MaintenanceBundle\Event\PreLockEvent;
+use Lexik\Bundle\MaintenanceBundle\Event\PreUnlockEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -21,6 +26,11 @@ abstract class AbstractDriver
      * @var TranslatorInterface
      */
     protected $translator;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * Constructor
@@ -76,10 +86,14 @@ abstract class AbstractDriver
      *
      * @return boolean
      */
-    public function lock()
+    final public function lock()
     {
         if (!$this->isExists()) {
-            return $this->createLock();
+            $this->eventDispatcher->dispatch(PreLockEvent::NAME, new PreLockEvent());
+            $success = $this->createLock();
+            $this->eventDispatcher->dispatch(PostLockEvent::NAME, new PostLockEvent($success));
+
+            return $success;
         } else {
             return false;
         }
@@ -90,10 +104,14 @@ abstract class AbstractDriver
      *
      * @return boolean
      */
-    public function unlock()
+    final public function unlock()
     {
         if ($this->isExists()) {
-            return $this->createUnlock();
+            $this->eventDispatcher->dispatch(PreUnlockEvent::NAME, new PreUnlockEvent());
+            $success = $this->createUnlock();
+            $this->eventDispatcher->dispatch(PostUnlockEvent::NAME, new PostUnlockEvent($success));
+
+            return $success;
         } else {
             return false;
         }
@@ -127,5 +145,16 @@ abstract class AbstractDriver
     public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
+    }
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     * @return AbstractDriver
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
     }
 }
