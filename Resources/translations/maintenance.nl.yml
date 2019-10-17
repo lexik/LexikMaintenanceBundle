@@ -1,0 +1,7 @@
+lexik_maintenance.success_unlock: Server is online.
+lexik_maintenance.not_success_unlock: Onmogelijk deze actie te voltooien.
+lexik_maintenance.not_success_lock: Server is al aan het vergrendelen.
+lexik_maintenance.success_lock_database: Server is in onderhoud met chauffeursdatabase.
+lexik_maintenance.success_lock_file: Server is in onderhoud met chauffeursdossier.
+lexik_maintenance.success_lock_memc: Server is onder onderhoud met memcache.
+lexik_maintenance.success_lock_shm: Server is in onderhoud met shm.
