@@ -20,8 +20,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('lexik_maintenance');
+        $treeBuilder = new TreeBuilder('lexik_maintenance');
+        
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('sensio_framework_extra');
+        }
 
         $rootNode
             ->addDefaultsIfNotSet()
