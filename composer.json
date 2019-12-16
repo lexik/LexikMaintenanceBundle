@@ -1,5 +1,5 @@
 {
-    "name": "lexik/maintenance-bundle",
+    "name": "prolix/maintenance-bundle",
     "type": "symfony-bundle",
     "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
     "keywords": ["Symfony2", "bundle", "maintenance"],
@@ -21,12 +21,12 @@
     ],
     "require": {
         "php": ">=5.3.9",
-        "symfony/framework-bundle": "~2.7|~3.0|^4.0",
-        "symfony/translation": "~2.7|~3.0|^4.0"
+        "symfony/framework-bundle": "~2.7|~3.0|^4.0|^5.0",
+        "symfony/translation": "~2.7|~3.0|^4.0|^5.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0|^4.0",
-        "phpunit/phpunit": "~4.8|~5.7.11"
+        "symfony/phpunit-bridge": "~2.7|~3.0|^4.0|^5.0",
+        "phpunit/phpunit": "8.5.*"
     },
     "autoload":     {
         "psr-4": { "Lexik\\Bundle\\MaintenanceBundle\\": "" }
