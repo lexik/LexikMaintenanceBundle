@@ -4,7 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Create an unlock action
@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverUnlockCommand extends ContainerAwareCommand
+class DriverUnlockCommand extends Command
 {
     /**
      * {@inheritdoc}
