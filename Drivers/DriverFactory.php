@@ -39,7 +39,7 @@ class DriverFactory
      * @param array               $driverOptions Options driver
      * @throws \ErrorException
      */
-    public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, array $driverOptions)
+    public function __construct(DatabaseDriver $dbDriver, Translator $translator, array $driverOptions)
     {
         $this->driverOptions = $driverOptions;
 
