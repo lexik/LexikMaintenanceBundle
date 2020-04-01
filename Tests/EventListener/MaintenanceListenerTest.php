@@ -3,6 +3,7 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -17,7 +18,7 @@ use Symfony\Component\Translation\MessageSelector;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
+class MaintenanceListenerTest extends \PHPUnit\Framework\TestCase
 {
     protected
         $container,
@@ -158,6 +159,10 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider routeProviderWithDebugContext
+     *
+     * @param bool $debug
+     * @param string|null $route
+     * @param bool $expected
      */
     public function testRouteFilter($debug, $route, $expected)
     {
@@ -174,33 +179,46 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array(), array(), $debug);
-
-        $info = sprintf('Should be %s route %s with when we are %s debug env',
-            $expected === true ? 'allow' : 'deny',
-            $route,
-            $debug === true ? 'in' : 'not in'
+        $listener = new MaintenanceListener(
+            $this->factory,
+            null,
+            null,
+            null,
+            array(),
+            array(),
+            null,
+            array(),
+            null,
+            null,
+            null,
+            $debug
         );
 
-        $this->assertTrue($listener->onKernelRequest($event) === $expected, $info);
+        if (!$expected) {
+            $this->expectException('Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException');
+        }
+
+        $listener->onKernelRequest($event);
     }
 
+    /**
+     * @return array
+     */
     public function routeProviderWithDebugContext()
     {
         $debug = array(true, false);
-        $routes = array('route_1', '_route_started_with_underscore');
+        $routes = array('route_1', '_route_started_with_underscore', null);
 
         $data = array();
 
         foreach ($debug as $isDebug) {
             foreach ($routes as $route) {
-                $data[] = array($isDebug, $route, (true === $isDebug && '_' === $route[0]) ? false : true);
+                $data[] = array($isDebug, $route, (true === $isDebug && $route && '_' === $route[0]));
             }
         }
 
         return $data;
     }
-
 
     /**
      * Create request and test the listener
