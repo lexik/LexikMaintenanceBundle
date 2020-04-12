@@ -194,7 +194,7 @@ class MaintenanceListener
         }
 
         $route = $request->get('_route');
-        if (null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
+        if ($route === null || null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
             return;
         }
 
