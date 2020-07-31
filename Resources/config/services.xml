@@ -36,10 +36,16 @@
 
         <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand">
             <tag name="console.command"/>
+            <call method="setDriverFactory">
+                <argument type="service" id="lexik_maintenance.driver.factory"></argument>
+            </call>
         </service>
 
         <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand">
             <tag name="console.command"/>
+            <call method="setDriverFactory">
+                <argument type="service" id="lexik_maintenance.driver.factory"></argument>
+            </call>
         </service>
     </services>
 </container>
