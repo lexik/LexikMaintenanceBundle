@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -14,6 +15,20 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class DriverUnlockCommand extends ContainerAwareCommand
 {
+
+    /**
+     * @var DriverFactory
+     */
+    private $driverFactory;
+
+    /**
+     * @param DriverFactory $driverFactory
+     */
+    public function setDriverFactory(DriverFactory $driverFactory)
+    {
+        $this->driverFactory = $driverFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -22,12 +37,13 @@ class DriverUnlockCommand extends ContainerAwareCommand
         $this
             ->setName('lexik:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
-            ->setHelp(<<<EOT
+            ->setHelp(
+                <<<EOT
     You can execute the unlock without a warning message which you need to interact with:
 
     <info>%command.full_name% --no-interaction</info>
 EOT
-                );
+            );
     }
 
     /**
@@ -39,7 +55,7 @@ EOT
             return;
         }
 
-        $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        $driver = $this->driverFactory->getDriver();
 
         $unlockMessage = $driver->getMessageUnlock($driver->unlock());
 
@@ -47,7 +63,7 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @return bool
      */
@@ -59,11 +75,13 @@ EOT
             $confirmation = true;
         } else {
             // confirm
-            $output->writeln(array(
-                '',
-                $formatter->formatBlock('You are about to unlock your server.', 'bg=green;fg=white', true),
-                '',
-            ));
+            $output->writeln(
+                array(
+                    '',
+                    $formatter->formatBlock('You are about to unlock your server.', 'bg=green;fg=white', true),
+                    '',
+                )
+            );
 
             $confirmation = $this->askConfirmation(
                 'WARNING! Are you sure you wish to continue? (y/n) ',
@@ -83,15 +101,16 @@ EOT
      * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
      * but use the ConfirmationQuestion when available.
      *
-     * @param $question
-     * @param InputInterface $input
+     * @param                 $question
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')
