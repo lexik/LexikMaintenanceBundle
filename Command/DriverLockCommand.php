@@ -21,6 +21,16 @@ class DriverLockCommand extends Command
     protected $ttl;
 
     /**
+     * return object of Queue
+     *
+     * @return object
+     * @package LexikMaintenanceBundleBundle
+     */
+    public function setContainer($container){
+        $this->container = $container;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -70,6 +80,7 @@ EOT
         }
 
         $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
+        return 0;
     }
 
     /**
@@ -137,7 +148,7 @@ EOT
      */
     private function getDriver()
     {
-        return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        return $this->container->get('lexik_maintenance.driver.factory')->getDriver();
     }
 
     /**

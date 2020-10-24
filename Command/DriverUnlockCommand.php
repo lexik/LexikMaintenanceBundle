@@ -14,6 +14,17 @@ use Symfony\Component\Console\Command\Command;
  */
 class DriverUnlockCommand extends Command
 {
+
+    /**
+     * return object of Queue
+     *
+     * @return object
+     * @package LexikMaintenanceBundleBundle
+     */
+    public function setContainer($container){
+        $this->container = $container;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,11 +50,12 @@ EOT
             return;
         }
 
-        $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        $driver = $this->container->get('lexik_maintenance.driver.factory')->getDriver();
 
         $unlockMessage = $driver->getMessageUnlock($driver->unlock());
 
         $output->writeln('<info>'.$unlockMessage.'</info>');
+        return 0;
     }
 
     /**

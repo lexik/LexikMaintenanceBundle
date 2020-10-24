@@ -35,10 +35,16 @@
 
         <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand">
             <tag name="console.command"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand" class="Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand">
             <tag name="console.command"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
     </services>
 </container>
