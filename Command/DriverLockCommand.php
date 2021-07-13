@@ -5,10 +5,10 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * Create a lock action
@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverLockCommand extends ContainerAwareCommand
+class DriverLockCommand extends Command
 {
     protected $ttl;
 
