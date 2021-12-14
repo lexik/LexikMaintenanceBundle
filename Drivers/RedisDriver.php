@@ -2,6 +2,7 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 use Predis\Client as PredisClient;
+use Predis\Response\Status;
 
 /**
  * Class RedisDriver
@@ -58,7 +59,12 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     protected function createLock()
     {
-        return ($this->redisInstance->setex($this->options['key_name'], $this->options['ttl'], true) === 'OK');
+        $status = $this->redisInstance->setex($this->options['key_name'], $this->options['ttl'], true);
+        if ($status instanceof Status) {
+            $status = $status->getPayload();
+        }
+
+        return $status === 'OK';
     }
 
     /**
@@ -82,7 +88,7 @@ class RedisDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_memc' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'lexik_maintenance.success_lock_redis' : 'lexik_maintenance.not_success_lock';
 
         return $this->translator->trans($key, array(), 'maintenance');
     }
