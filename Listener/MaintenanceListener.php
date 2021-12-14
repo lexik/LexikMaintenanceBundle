@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Listener to decide if user can access to the site
@@ -151,8 +152,14 @@ class MaintenanceListener
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if(!$event->isMasterRequest()){
-            return;
+        if (Kernel::VERSION_ID >= 50300) {
+            if (!$event->isMainRequest()) {
+                return;
+            }
+        } else {
+            if (!$event->isMasterRequest()){
+                return;
+            }
         }
 
         $request = $event->getRequest();
