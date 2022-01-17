@@ -86,6 +86,8 @@ EOT
         }
 
         $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
+
+        return 0;
     }
 
     /**
