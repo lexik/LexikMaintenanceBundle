@@ -5,3 +5,4 @@ phpunit.xml
 .settings
 vendor
 composer.lock
+/.idea

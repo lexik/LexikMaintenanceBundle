@@ -1,9 +1,9 @@
 {
-    "name": "lexik/maintenance-bundle",
+    "name": "kilik/maintenance-bundle",
     "type": "symfony-bundle",
-    "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
-    "keywords": ["Symfony2", "bundle", "maintenance"],
-    "homepage": "https://github.com/lexik/LexikMaintenanceBundle",
+    "description": "Fork of LexixMaintenanceBundle with Redis support.",
+    "keywords": ["Symfony", "bundle", "maintenance"],
+    "homepage": "https://github.com/kilik/LexikMaintenanceBundle",
     "license": "MIT",
     "authors": [
         {
@@ -27,7 +27,7 @@
         "doctrine/dbal": ">2.10|^3.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0|^4.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0|^4.0|^5.0",
         "phpunit/phpunit": "~4.8|~5.7.11"
     },
     "autoload":     {
