@@ -8,7 +8,7 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Create a lock action
@@ -16,9 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverLockCommand extends ContainerAwareCommand
+class DriverLockCommand extends Command
 {
     protected $ttl;
+
+    /**
+     * return object of Queue
+     *
+     * @return object
+     * @package LexikMaintenanceBundleBundle
+     */
+    public function setContainer($container){
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
@@ -70,6 +80,7 @@ EOT
         }
 
         $output->writeln('<info>'.$driver->getMessageLock($driver->lock()).'</info>');
+        return 0;
     }
 
     /**
@@ -137,7 +148,7 @@ EOT
      */
     private function getDriver()
     {
-        return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        return $this->container->get('lexik_maintenance.driver.factory')->getDriver();
     }
 
     /**

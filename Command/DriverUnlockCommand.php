@@ -4,7 +4,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Create an unlock action
@@ -12,8 +12,19 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverUnlockCommand extends ContainerAwareCommand
+class DriverUnlockCommand extends Command
 {
+
+    /**
+     * return object of Queue
+     *
+     * @return object
+     * @package LexikMaintenanceBundleBundle
+     */
+    public function setContainer($container){
+        $this->container = $container;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,11 +50,12 @@ EOT
             return;
         }
 
-        $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        $driver = $this->container->get('lexik_maintenance.driver.factory')->getDriver();
 
         $unlockMessage = $driver->getMessageUnlock($driver->unlock());
 
         $output->writeln('<info>'.$unlockMessage.'</info>');
+        return 0;
     }
 
     /**
