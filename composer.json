@@ -1,5 +1,5 @@
 {
-    "name": "prolix/maintenance-bundle",
+    "name": "lexik/maintenance-bundle",
     "type": "symfony-bundle",
     "description": "This bundle allows you to place your website in maintenance mode by calling two commands from your console.",
     "keywords": ["Symfony2", "bundle", "maintenance"],
